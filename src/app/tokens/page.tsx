@@ -5,8 +5,7 @@ import { KurvenVergleich } from './kurven'
 export default function Tokens() {
   return (
     <section className="pt-20">
-      <p className="font-mono text-xs uppercase tracking-widest text-leise">bewegung · tokens.ts</p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">Vier Dauern, vier Kurven.</h1>
+      <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Vier Dauern, vier Kurven.</h1>
       <p className="mt-4 max-w-2xl text-leise">
         Die einzigen Zahlen für Bewegung in einem Projekt. In TypeScript für GSAP, als CSS-Variablen für
         Übergänge und View Transitions. Ein Exit dauert rund 70 % des Enters.

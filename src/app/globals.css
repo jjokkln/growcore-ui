@@ -13,11 +13,11 @@
 }
 
 :root {
-  --papier: #f6f5f1;
-  --flaeche: #ffffff;
-  --tinte: #15171b;
-  --leise: #5d626c;
-  --linie: #e3e1da;
+  --papier: #f3f4f6;
+  --flaeche: #fbfbfc;
+  --tinte: #14161b;
+  --leise: #575d68;
+  --linie: #dfe2e7;
   --akzent: #2747c7;
   --kopf-hoehe: 4rem;
 }
@@ -44,3 +44,27 @@ body {
   outline: 2px solid var(--akzent);
   outline-offset: 2px;
 }
+
+/* Handbuch-Text: aus Markdown gerendert, Lesebreite 70ch. */
+.handbuch-text { max-width: 70ch; line-height: 1.7; }
+.handbuch-text h2 { margin: 3rem 0 1rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; }
+.handbuch-text h2:first-child { margin-top: 0; }
+.handbuch-text h3 { margin: 2rem 0 .5rem; font-size: 1.1rem; font-weight: 600; }
+.handbuch-text p { margin: .9rem 0; }
+.handbuch-text ul, .handbuch-text ol { margin: .9rem 0; padding-left: 1.25rem; }
+.handbuch-text ul { list-style: disc; }
+.handbuch-text ol { list-style: decimal; }
+.handbuch-text li { margin: .35rem 0; padding-left: .25rem; }
+.handbuch-text li::marker { color: var(--leise); }
+.handbuch-text strong { font-weight: 600; }
+.handbuch-text a { color: var(--akzent); text-decoration: underline; text-underline-offset: 2px; }
+/* Lange Code-Schnipsel dürfen umbrechen, sonst schieben sie die Seite auf dem Handy breit. */
+.handbuch-text code { overflow-wrap: anywhere; font-family: var(--font-mono); font-size: .85em; padding: .1em .35em; border-radius: .3rem; background: var(--flaeche); border: 1px solid var(--linie); }
+.handbuch-text pre { margin: 1.25rem 0; padding: 1rem 1.25rem; overflow-x: auto; border-radius: .75rem; background: var(--tinte); color: #e8eaf0; font-size: .85rem; line-height: 1.6; }
+.handbuch-text pre code { background: none; border: 0; padding: 0; color: inherit; }
+.handbuch-text table { width: 100%; max-width: 100%; margin: 1.25rem 0; border-collapse: collapse; font-size: .92rem; display: block; overflow-x: auto; }
+.handbuch-text th { text-align: left; font-weight: 600; color: var(--leise); border-bottom: 1px solid var(--tinte); padding: .5rem .75rem .5rem 0; }
+.handbuch-text td { border-bottom: 1px solid var(--linie); padding: .55rem .75rem .55rem 0; vertical-align: top; }
+/* Prüflisten: Kästchen hängend vor dem Text, Text bricht normal um (kein Flex, sonst laufen Code-Schnipsel über). */
+.handbuch-text li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.25rem; padding-left: 1.6rem; text-indent: -1.6rem; }
+.handbuch-text input[type=checkbox] { accent-color: var(--akzent); margin: 0 .55rem 0 0; vertical-align: -1px; }

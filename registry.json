@@ -238,6 +238,175 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "monatsraster",
+      "type": "registry:component",
+      "title": "Monatsraster",
+      "description": "Monatskalender: sechs feste Zeilen, Woche ab Montag, Blättern mit Richtung, Auswahl gleitet per Flip, volle Tastaturbedienung.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/monatsraster.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "reiter",
+      "type": "registry:component",
+      "title": "Reiter",
+      "description": "Tabs nach WAI-ARIA mit gleitendem Strich (nur transform), Inhalt blendet kurz ein.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/reiter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "meldung",
+      "type": "registry:component",
+      "title": "Meldung",
+      "description": "Kurze Rückmeldungen (Toasts) mit Rückgängig, höchstens drei, rücken per Flip nach, Live-Region.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/meldung.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "aktion-knopf",
+      "type": "registry:component",
+      "title": "AktionKnopf",
+      "description": "Knopf für Aktionen, die dauern: laden, Haken zeichnet sich bei Erfolg, Schütteln bei Fehler, Breite bleibt.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/aktion-knopf.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "terminbuchung",
+      "type": "registry:component",
+      "title": "Terminbuchung",
+      "description": "Terminbuchung: Terminart, Monat, Uhrzeitspalte fährt auf, Formular und Bestätigung in einer Karte. Datenunabhängig.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung",
+        "jjokkln/growcore-ui/monatsraster",
+        "jjokkln/growcore-ui/aktion-knopf"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/terminbuchung.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "wizard",
+      "type": "registry:component",
+      "title": "Wizard",
+      "description": "Konfigurator in Schritten aus einer Liste: Verzweigung, Entwurf fortsetzen, Zusammenfassung mit Ändern, Schritte gleiten in Leserichtung.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung",
+        "jjokkln/growcore-ui/aktion-knopf"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/wizard.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "anmeldung",
+      "type": "registry:component",
+      "title": "Anmeldung",
+      "description": "Anmeldung mit E-Mail und Passwort, optional 6-stelliger Code; neutrale Fehler, Feststelltaste, Code mit Einfügen.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung",
+        "jjokkln/growcore-ui/aktion-knopf"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/anmeldung.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "bild-enthuellung",
+      "type": "registry:component",
+      "title": "BildEnthuellung",
+      "description": "Bild öffnet sich aus einem Ausschnitt (clip-path) und setzt sich von vergrößert auf normal. Einmal oder am Scrollen.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/bild-enthuellung.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "kartenstapel",
+      "type": "registry:component",
+      "title": "Kartenstapel",
+      "description": "Karten legen sich beim Scrollen übereinander (sticky), die verdeckte tritt zurück. Kein Pin, kein Scroll-Übernehmen.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/kartenstapel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "laufband",
+      "type": "registry:component",
+      "title": "Laufband",
+      "description": "Endloses Laufband mit Anhalten-Knopf (WCAG 2.2.2), beschleunigt kurz beim Scrollen, steht bei reduzierter Bewegung.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/laufband.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "zeiger-vorschau",
+      "type": "registry:component",
+      "title": "ZeigerVorschau",
+      "description": "Liste, bei der ein Vorschaubild dem Mauszeiger folgt; auf Touch und per Tastatur mit Ersatz.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/zeiger-vorschau.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

@@ -4,6 +4,10 @@
 plus Demo-Seite. Installiert wird über die GitHub-Adresse `jjokkln/growcore-ui/<name>`; die CLI liest
 `registry.json` direkt aus dem Repo, es gibt keinen Build und kein Hosting.
 
+**Handbuch:** `handbuch/*.md` ist die Quelle für UI-Muster (Kalender, Formular, Wizard …) und
+Grundlagen (Bewegung, Typografie …). Gerendert von `src/app/handbuch/` (marked, beim Build), gelesen
+von Agenten per grep. Der Katalog-Hook im AI-OS legt passende Kapitel bei Bau-Wünschen vor.
+
 **Aufbau**
 - `registry.json`: die Liste der Bausteine. Pfade zeigen auf die echten Dateien der Demo-App,
   daher gibt es keine zweite Kopie.
@@ -13,11 +17,13 @@ plus Demo-Seite. Installiert wird über die GitHub-Adresse `jjokkln/growcore-ui/
   `registry.json` (Feld `css`) und in `src/app/globals.css`. Bei Änderung beide nachziehen.
 - CSS, das ein Baustein braucht, liegt in der Komponente als `<style href precedence>`. React 19
   hängt es einmal in den `<head>` und entdoppelt es. So reist es mit der Datei.
-- `src/app/`: Demo (`/` alle Bausteine, `/tokens` Kurvenvergleich), `noindex`, wird nicht öffentlich
-  betrieben.
+- `src/app/`: `/` Handbuch, `/handbuch/<slug>` Kapitel mit Live-Beispiel, `/bausteine` alle Bausteine,
+  `/tokens` Kurvenvergleich. `noindex`, noch nicht öffentlich betrieben (Impressum fehlt).
 
 **Prüfen**
 - `npm run lint && npm run build`
+- Handbuch: `node ~/.claude/tools/ui-verify/probe-growcore-handbuch.mjs` (alle Kapitel 1280/390, eine h1,
+  kein Überlauf, kein Geviertstrich; Abläufe Terminbuchung, Wizard, Anmeldung, Kalender)
 - `npx shadcn@latest registry validate ./registry.json`
 - Laufprobe: `node ~/.claude/tools/ui-verify/probe-growcore-ui.mjs` gegen `next start -p 3123`.
   Prüft Desktop 1280 und Handy 390, ob nach dem Durchscrollen alles sichtbar ist, ob bei reduce sofort

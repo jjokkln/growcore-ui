@@ -1,6 +1,8 @@
 # growcore-ui
 
-Motion-Bausteine von GrowCore für Next.js (App Router, React 19.2+) und Tailwind 4. Eine
+Design-Handbuch und Bausteine von GrowCore. Das **Handbuch** (`handbuch/*.md`) beschreibt je Muster
+Aufbau, mögliche Funktionen, Regeln für gute Gestaltung, Bewegung und Barrierefreiheit; die Demo
+zeigt jedes Kapitel mit Live-Beispiel. Die **Bausteine** sind Bausteine für Next.js (App Router, React 19.2+) und Tailwind 4. Eine
 shadcn-Registry direkt aus diesem öffentlichen Repo: Der Code landet editierbar im Projekt, die
 Quelle bleibt hier.
 
@@ -30,6 +32,14 @@ Zielprojekt: `components.json` (`npx shadcn@latest init`) mit Alias `@/`.
 | `feiern` | Konfetti für einen echten Erfolg |
 | `seitenwechsel` | View Transitions zwischen Seiten, ohne GSAP |
 | `platzhalter` | Ladeplatzhalter in Endform, reines CSS |
+| `monatsraster` | Monatskalender, Auswahl gleitet, volle Tastatur |
+| `terminbuchung` | Termin wählen und buchen in einer Karte |
+| `wizard` | Konfigurator in Schritten mit Verzweigung und Entwurf |
+| `anmeldung` | E-Mail, Passwort, optional Code |
+| `aktion-knopf` | Knopf mit Laden, Erfolg, Fehler |
+| `meldung` | Toasts mit Rückgängig |
+| `reiter` | Tabs mit gleitendem Strich |
+| `bild-enthuellung`, `kartenstapel`, `laufband`, `zeiger-vorschau` | besondere Elemente für Marketingseiten |
 
 ## Regeln, die jeder Baustein einhält
 
@@ -45,10 +55,18 @@ Zielprojekt: `components.json` (`npx shadcn@latest init`) mit Alias `@/`.
 npm install && npm run dev
 ```
 
-Alle Bausteine live auf `/`, die Tokens mit Kurvenvergleich auf `/tokens`.
+Handbuch auf `/` (Kapitel unter `/handbuch/<slug>`), alle Bausteine live auf `/bausteine`, Tokens auf `/tokens`.
 
 ## Neuen Baustein aufnehmen
 
 1. Datei unter `src/components/motion/`, `src/hooks/` oder `src/lib/motion/` anlegen, nur aus `@/lib/motion/gsap` importieren.
 2. Eintrag in `registry.json` (mit `registryDependencies: ["jjokkln/growcore-ui/bewegung"]`, falls GSAP gebraucht wird).
 3. Abschnitt auf der Demo-Seite, dann `npx shadcn@latest registry validate ./registry.json`, `npm run lint`, `npm run build`.
+
+## Neues Handbuch-Kapitel
+
+`handbuch/<slug>.md` mit Frontmatter `titel`, `gruppe` (grundlagen | muster | besonderes), `kurz`,
+`stichworte`, `bausteine`, `demo`, `stand`. Muster-Kapitel haben die Abschnitte Wofür, Aufbau,
+Funktionen, Worauf es ankommt, Bewegung, Zugänglichkeit, Typische Fehler, Prüfliste (Vorlage:
+`handbuch/kalender.md`). Die Seite entsteht beim Build von selbst; Live-Beispiele kommen aus
+`src/app/_demo/register.tsx`. Kein Geviertstrich, keine Kunden- oder Projektnamen (öffentlich).
