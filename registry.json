@@ -1,0 +1,243 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "growcore",
+  "homepage": "https://github.com/jjokkln/growcore-ui",
+  "items": [
+    {
+      "name": "bewegung",
+      "type": "registry:lib",
+      "title": "Bewegung (Kern)",
+      "description": "GSAP-Kern: eine Registrierungsstelle (lib/motion/gsap.ts), Motion-Tokens DAUER/KURVE als TS und CSS-Variablen, BEWEGUNG-Bedingung für reduced motion. Voraussetzung aller anderen Bausteine.",
+      "dependencies": [
+        "gsap@^3.15.0",
+        "@gsap/react@^2.1.2"
+      ],
+      "files": [
+        {
+          "path": "src/lib/motion/gsap.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "src/lib/motion/tokens.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "css": {
+        ":root": {
+          "--dauer-xs": "150ms",
+          "--dauer-sm": "250ms",
+          "--dauer-md": "450ms",
+          "--dauer-lg": "800ms",
+          "--kurve-raus": "cubic-bezier(0.215, 0.61, 0.355, 1)",
+          "--kurve-rein": "cubic-bezier(0.55, 0.085, 0.68, 0.53)",
+          "--kurve-wechsel": "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
+          "--kurve-stark": "cubic-bezier(0.19, 1, 0.22, 1)"
+        }
+      }
+    },
+    {
+      "name": "auftritt",
+      "type": "registry:component",
+      "title": "Auftritt",
+      "description": "Gestaffeltes Einblenden (data-auftritt) und wachsende Balken (data-balken), beim Laden oder beim Scrollen.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/auftritt.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "text-auftritt",
+      "type": "registry:component",
+      "title": "TextAuftritt",
+      "description": "Zeilen oder Wörter steigen aus einer Maske auf (SplitText mit autoSplit, aria auto, nach fonts.ready).",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/text-auftritt.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "zahl",
+      "type": "registry:component",
+      "title": "Zahl",
+      "description": "Kennzahl zählt einmal hoch, ohne Springen oder Umbrechen; Intl-Format, vorgelesen wird der Endwert.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/zahl.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "aufklappen",
+      "type": "registry:component",
+      "title": "Aufklappen",
+      "description": "Bereich öffnet auf height: auto und schließt schneller; geschlossen inert.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/aufklappen.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "schublade",
+      "type": "registry:component",
+      "title": "Schublade",
+      "description": "Seitliches Menü auf nativem dialog mit Schleier, gestaffelten Einträgen und schnellerem Exit.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/schublade.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "scroll-geschichte",
+      "type": "registry:component",
+      "title": "ScrollGeschichte",
+      "description": "Erklärseite: Bild bleibt stehen (sticky), Schritte scrollen vorbei, Bild blendet mit.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/scroll-geschichte.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "ablauf",
+      "type": "registry:component",
+      "title": "Ablauf",
+      "description": "Schritte, die eine Linie beim Scrollen verbindet (scrub); ab 768 px waagerecht.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/ablauf.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "svg-zeichnen",
+      "type": "registry:component",
+      "title": "SvgZeichnen",
+      "description": "Erklärgrafik aus eigenem SVG: data-zeichnen, data-erscheinen, data-folgt (DrawSVG, MotionPath).",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/svg-zeichnen.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "flip-liste",
+      "type": "registry:hook",
+      "title": "useFlipListe",
+      "description": "Einträge gleiten nach Filtern oder Sortieren an ihren neuen Platz (Flip).",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/hooks/use-flip-liste.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "magnet",
+      "type": "registry:hook",
+      "title": "useMagnet",
+      "description": "Element folgt dem Zeiger ein Stück (quickTo), nur mit echter Maus.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/hooks/use-magnet.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "neigung",
+      "type": "registry:hook",
+      "title": "useNeigung",
+      "description": "Karte neigt sich leicht zum Zeiger, höchstens wenige Grad.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/hooks/use-neigung.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "feiern",
+      "type": "registry:lib",
+      "title": "feiern()",
+      "description": "Konfetti für einen echten Erfolg (Physics2D).",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/lib/motion/feiern.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "seitenwechsel",
+      "type": "registry:component",
+      "title": "Seitenwechsel",
+      "description": "View Transitions zwischen Seiten mit Richtung (vor/zurueck), Fokus auf die neue h1. Ohne GSAP.",
+      "files": [
+        {
+          "path": "src/components/motion/seitenwechsel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "platzhalter",
+      "type": "registry:component",
+      "title": "Platzhalter",
+      "description": "Ladeplatzhalter in Endform, reines CSS, erscheint erst nach 180 ms. Auch in loading.tsx.",
+      "files": [
+        {
+          "path": "src/components/motion/platzhalter.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

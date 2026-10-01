@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# growcore-ui
 
-## Getting Started
-
-First, run the development server:
+Motion-Bausteine von GrowCore für Next.js (App Router, React 19.2+) und Tailwind 4. Eine
+shadcn-Registry direkt aus diesem öffentlichen Repo: Der Code landet editierbar im Projekt, die
+Quelle bleibt hier.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx shadcn@latest add jjokkln/growcore-ui/auftritt
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Der Kern `bewegung` kommt bei jedem Baustein automatisch mit (`src/lib/motion/gsap.ts`,
+`tokens.ts`, CSS-Variablen `--dauer-*` und `--kurve-*` in `globals.css`). Voraussetzung im
+Zielprojekt: `components.json` (`npx shadcn@latest init`) mit Alias `@/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Bausteine
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Name | Was |
+| --- | --- |
+| `bewegung` | Kern: GSAP einmal registriert, Tokens `DAUER`/`KURVE`, Bedingung `BEWEGUNG` für reduced motion |
+| `auftritt` | gestaffeltes Einblenden (`data-auftritt`) und wachsende Balken (`data-balken`), beim Laden oder Scrollen |
+| `text-auftritt` | Zeilen/Wörter steigen aus einer Maske auf (SplitText) |
+| `zahl` | Kennzahl zählt hoch, ohne Springen; vorgelesen wird der Endwert |
+| `aufklappen` | `height: auto` auf und zu, geschlossen `inert` |
+| `schublade` | seitliches Menü auf nativem `<dialog>` |
+| `scroll-geschichte` | Erklärseite: Bild steht, Schritte scrollen vorbei |
+| `ablauf` | Schritte, die eine Linie beim Scrollen verbindet |
+| `svg-zeichnen` | Erklärgrafik aus eigenem SVG: zeichnen, erscheinen, Pfaden folgen |
+| `flip-liste` | Einträge gleiten nach Filtern an ihren Platz |
+| `magnet`, `neigung` | Zeiger-Effekte, nur mit echter Maus |
+| `feiern` | Konfetti für einen echten Erfolg |
+| `seitenwechsel` | View Transitions zwischen Seiten, ohne GSAP |
+| `platzhalter` | Ladeplatzhalter in Endform, reines CSS |
 
-## Learn More
+## Regeln, die jeder Baustein einhält
 
-To learn more about Next.js, take a look at the following resources:
+- „Bewegung reduzieren“ über `gsap.matchMedia()`: Ohne Bewegungswunsch steht der Inhalt sofort da.
+- Nur `transform` und `opacity`. Das größte Element der Seite (Hero-Headline) wird nie ausgeblendet.
+- Kein Aufblitzen: Den Startzustand setzt CSS, bevor JavaScript läuft.
+- Dauer und Kurve nur aus den Tokens.
+- Nur `useGSAP` (räumt bei Unmount und im Strict Mode auf), Selektoren mit `scope`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install && npm run dev
+```
 
-## Deploy on Vercel
+Alle Bausteine live auf `/`, die Tokens mit Kurvenvergleich auf `/tokens`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Neuen Baustein aufnehmen
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Datei unter `src/components/motion/`, `src/hooks/` oder `src/lib/motion/` anlegen, nur aus `@/lib/motion/gsap` importieren.
+2. Eintrag in `registry.json` (mit `registryDependencies: ["jjokkln/growcore-ui/bewegung"]`, falls GSAP gebraucht wird).
+3. Abschnitt auf der Demo-Seite, dann `npx shadcn@latest registry validate ./registry.json`, `npm run lint`, `npm run build`.

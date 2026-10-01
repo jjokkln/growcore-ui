@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
+/* Motion-Tokens, Spiegel von src/lib/motion/tokens.ts (wird mit dem Baustein „bewegung“ verteilt). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --dauer-xs: 150ms;
+  --dauer-sm: 250ms;
+  --dauer-md: 450ms;
+  --dauer-lg: 800ms;
+  --kurve-raus: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --kurve-rein: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  --kurve-wechsel: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  --kurve-stark: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+:root {
+  --papier: #f6f5f1;
+  --flaeche: #ffffff;
+  --tinte: #15171b;
+  --leise: #5d626c;
+  --linie: #e3e1da;
+  --akzent: #2747c7;
+  --kopf-hoehe: 4rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-papier: var(--papier);
+  --color-flaeche: var(--flaeche);
+  --color-tinte: var(--tinte);
+  --color-leise: var(--leise);
+  --color-linie: var(--linie);
+  --color-akzent: var(--akzent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --ease-raus: var(--kurve-raus);
+  --ease-stark: var(--kurve-stark);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--papier);
+  color: var(--tinte);
+}
+
+:focus-visible {
+  outline: 2px solid var(--akzent);
+  outline-offset: 2px;
 }

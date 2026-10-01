@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Gebaute Registry: Installiert wird direkt aus registry.json auf GitHub, nicht aus Kopien.
+/public/r
