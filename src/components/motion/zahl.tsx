@@ -5,6 +5,8 @@ import { BEWEGUNG, KURVE, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Eine Kennzahl, die beim ersten Erscheinen hochzählt und bei jeder späteren Änderung vom alten
 // zum neuen Wert läuft. Nur für echte KPIs, nicht für jede Zahl auf der Seite.
+// nurErstes: Spätere Änderungen springen sofort auf den neuen Wert. Für Kacheln, die zugleich
+// Filter sind: Wer klickt, will die neue Zahl lesen, nicht zusehen, wie sie dorthin läuft.
 // Gegen Springen und Umbrechen: Eine unsichtbare Kopie des Endwerts im selben Grid-Feld hält die
 // Breite fest, tabular-nums macht alle Ziffern gleich breit, nowrap verhindert Umbrüche. Der
 // Server rendert den Endwert. Vorgelesen wird immer der Endwert, nie ein Zwischenstand.
@@ -15,12 +17,14 @@ export function Zahl({
   locale = 'de-DE',
   className,
   beimScrollen = true,
+  nurErstes = false,
 }: {
   wert: number
   format?: Intl.NumberFormatOptions
   locale?: string
   className?: string
   beimScrollen?: boolean
+  nurErstes?: boolean
 }) {
   const fmt = useMemo(() => new Intl.NumberFormat(locale, format), [locale, format])
   const text = fmt.format(wert)
@@ -37,6 +41,11 @@ export function Zahl({
       // doppelte Mount im Strict Mode verschluckt sonst das erste Hochzählen.
       const von = stand.current ?? 0
       const erstes = stand.current === null
+      if (!erstes && nurErstes) {
+        stand.current = wert
+        knoten.nodeValue = text
+        return
+      }
 
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
@@ -55,7 +64,7 @@ export function Zahl({
       })
       return () => mm.revert()
     },
-    { dependencies: [wert, text], revertOnUpdate: true },
+    { dependencies: [wert, text, nurErstes], revertOnUpdate: true },
   )
 
   return (
