@@ -8,6 +8,12 @@ plus Demo-Seite. Installiert wird über die GitHub-Adresse `jjokkln/growcore-ui/
 Grundlagen (Bewegung, Typografie …). Gerendert von `src/app/handbuch/` (marked, beim Build), gelesen
 von Agenten per grep. Der Katalog-Hook im AI-OS legt passende Kapitel bei Bau-Wünschen vor.
 
+**Startpakete:** `src/registry/start/<baustein>/` (14 Pflichtbausteine, in tsconfig ausgeschlossen,
+weil ihre Importe auf Pfade des Zielprojekts zeigen). Testen nur im frischen Projekt:
+create-next-app, `shadcn init -d -y`, `shadcn add jjokkln/growcore-ui/website-start -y`, Layout verdrahten,
+`npm run lint && npm test && npm run build`. Zwei Dateien eines Eintrags nie gleich benennen (shadcn biegt
+Importe sonst falsch um), Migrationszeitstempel eindeutig halten.
+
 **Aufbau**
 - `registry.json`: die Liste der Bausteine. Pfade zeigen auf die echten Dateien der Demo-App,
   daher gibt es keine zweite Kopie.

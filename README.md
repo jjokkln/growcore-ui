@@ -14,6 +14,20 @@ Der Kern `bewegung` kommt bei jedem Baustein automatisch mit (`src/lib/motion/gs
 `tokens.ts`, CSS-Variablen `--dauer-*` und `--kurve-*` in `globals.css`). Voraussetzung im
 Zielprojekt: `components.json` (`npx shadcn@latest init`) mit Alias `@/`.
 
+## Startpakete
+
+Neues Projekt mit allen Pflichtbausteinen in einem Befehl:
+
+```bash
+npx shadcn@latest add jjokkln/growcore-ui/website-start   # bzw. app-start für Apps mit Konten
+```
+
+Inhalt: site-config, basis-url, seo-kern, fonts, consent, einwilligung-nachweis, rechtsseiten,
+fehlerseiten, supabase-clients, supabase-sparsamkeit, start-rahmen, Motion-Kern; dazu lead-formular
+(Website) bzw. audit-log, rollen-testleiste, anmeldung (App). Quellen unter `src/registry/start/`
+(von der Demo-App ausgenommen). Kopfkommentare stehen dort hinter den Importen, weil shadcn
+Kommentare vor der ersten Anweisung beim Einbau entfernt.
+
 ## Bausteine
 
 | Name | Was |
