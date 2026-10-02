@@ -42,3 +42,7 @@ next-env.d.ts
 
 # Gebaute Registry: Installiert wird direkt aus registry.json auf GitHub, nicht aus Kopien.
 /public/r
+
+# Referenzen mit echten Kundenseiten: nur lokal, nie ins öffentliche Repo (CLAUDE.md).
+/lokal
+/public/lokal

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Seitenwechsel } from '@/components/motion/seitenwechsel'
 import { MeldungenRahmen } from '@/components/motion/meldung'
+import { referenzenVorhanden } from './referenzen/_daten'
 import './globals.css'
 
 // next/font lädt die Schriften beim Build und liefert sie selbst aus: kein Request an Google.
@@ -23,14 +24,18 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           className="sticky top-0 z-20 border-b border-linie bg-papier/85 backdrop-blur"
           style={{ viewTransitionName: 'kopf' }}
         >
-          <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <Link href="/" transitionTypes={['zurueck']} className="font-semibold tracking-tight">
+          <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+            <Link href="/" transitionTypes={['zurueck']} className="shrink-0 whitespace-nowrap font-semibold tracking-tight">
               growcore-ui
             </Link>
-            <div className="flex gap-5 text-sm text-leise sm:gap-6">
+            <div className="flex min-w-0 gap-4 overflow-x-auto whitespace-nowrap text-sm text-leise [scrollbar-width:none] sm:gap-6">
               <Link href="/" transitionTypes={['zurueck']} className="hover:text-tinte">Handbuch</Link>
               <Link href="/bausteine" transitionTypes={['vor']} className="hover:text-tinte">Bausteine</Link>
               <Link href="/tokens" transitionTypes={['vor']} className="hover:text-tinte">Tokens</Link>
+              {/* Nur lokal: erscheint, wenn lokal/referenzen.json existiert (siehe referenzen/_daten.ts). */}
+              {referenzenVorhanden() && (
+                <Link href="/referenzen" transitionTypes={['vor']} className="hover:text-tinte">Referenzen</Link>
+              )}
             </div>
           </nav>
         </header>
