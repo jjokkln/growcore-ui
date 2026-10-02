@@ -1,9 +1,10 @@
+export const DAUER = { xs: 0.15, sm: 0.25, md: 0.45, lg: 0.8 } as const
+
 // Motion-Tokens: die einzigen Zahlen für Dauer und Kurve in einem Projekt. Bausteine und eigene
 // Animationen nehmen ihre Werte von hier, nie frei erfundene. Die CSS-Fassung (--dauer-*,
 // --kurve-*) steht in globals.css, damit CSS-Übergänge und View Transitions dieselbe Sprache
 // sprechen. Faustregeln: Ein Exit dauert rund 70 % des Enters, UI-Feedback bleibt unter 250 ms,
 // Reveals liegen bei 400–800 ms.
-export const DAUER = { xs: 0.15, sm: 0.25, md: 0.45, lg: 0.8 } as const
 
 export const KURVE = {
   raus: 'power3.out', // Standard: Dinge kommen an

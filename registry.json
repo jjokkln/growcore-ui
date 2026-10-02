@@ -407,6 +407,520 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "basis-url",
+      "type": "registry:lib",
+      "title": "Basis-URL",
+      "description": "Produktionsadresse aus der Deploy-Umgebung (VERCEL_PROJECT_PRODUCTION_URL, NEXT_PUBLIC_SITE_URL sticht). Bricht den Build auf Vercel ab, wenn keine gültige https-Adresse da ist, statt localhost in canonical und sitemap zu schreiben.",
+      "files": [
+        {
+          "path": "src/registry/start/basis-url/basis-url.ts",
+          "type": "registry:lib",
+          "target": "lib/basis-url.ts"
+        }
+      ]
+    },
+    {
+      "name": "site-config",
+      "type": "registry:lib",
+      "title": "Site-Config",
+      "description": "Stammdaten des Kunden an einer Stelle (Pflichtkern 10): Firma, Anschrift, Kontakt, Register, USt-ID, eingesetzte Dienste, Social. null heißt fehlt noch, fehlendePflichtangaben() listet die Lücken.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/basis-url"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/site-config/site-config.ts",
+          "type": "registry:lib",
+          "target": "lib/site-config.ts"
+        }
+      ]
+    },
+    {
+      "name": "seo-kern",
+      "type": "registry:lib",
+      "title": "SEO-Kern",
+      "description": "Metadaten-Helfer (Titelmuster, canonical, noindex ohne Freigabe), JSON-LD-Fabriken mit <JsonLd>, sitemap.ts, robots.ts und Vorschaubild (opengraph-image), alles aus site-config und basis-url.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config",
+        "jjokkln/growcore-ui/basis-url"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/seo-kern/metadaten.ts",
+          "type": "registry:lib",
+          "target": "lib/seo/metadaten.ts"
+        },
+        {
+          "path": "src/registry/start/seo-kern/jsonld.ts",
+          "type": "registry:lib",
+          "target": "lib/seo/jsonld.ts"
+        },
+        {
+          "path": "src/registry/start/seo-kern/og-bild.tsx",
+          "type": "registry:lib",
+          "target": "lib/seo/og-bild.tsx"
+        },
+        {
+          "path": "src/registry/start/seo-kern/json-ld.tsx",
+          "type": "registry:component",
+          "target": "components/seo/json-ld.tsx"
+        },
+        {
+          "path": "src/registry/start/seo-kern/sitemap.ts",
+          "type": "registry:file",
+          "target": "app/sitemap.ts"
+        },
+        {
+          "path": "src/registry/start/seo-kern/robots.ts",
+          "type": "registry:file",
+          "target": "app/robots.ts"
+        },
+        {
+          "path": "src/registry/start/seo-kern/opengraph-image.tsx",
+          "type": "registry:file",
+          "target": "app/opengraph-image.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fonts",
+      "type": "registry:lib",
+      "title": "Schriften",
+      "description": "Schriften über next/font, beim Build geladen und von der eigenen Domain ausgeliefert (kein Request an Google). Variablen --font-sans (Text) und --font-heading (h1 bis h3), passend zu shadcn.",
+      "files": [
+        {
+          "path": "src/registry/start/fonts/fonts.ts",
+          "type": "registry:lib",
+          "target": "lib/fonts.ts"
+        }
+      ],
+      "css": {
+        "@layer base": {
+          "h1, h2, h3": {
+            "font-family": "var(--font-heading, var(--font-sans))"
+          }
+        }
+      }
+    },
+    {
+      "name": "consent",
+      "type": "registry:component",
+      "title": "Einwilligung (Consent)",
+      "description": "Einwilligung nach § 25 TDDDG: Kategorien aus site-config.dienste, CONSENT_VERSION plus Empfänger-Stand (neuer Anbieter = neue Abfrage), 180 Tage gültig, useSyncExternalStore. Banner mit gleichwertigem Ablehnen, Knopf für Widerruf im Fuß, Einbettungs-Schranke für YouTube und Karten.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/consent/consent.ts",
+          "type": "registry:lib",
+          "target": "lib/consent.ts"
+        },
+        {
+          "path": "src/registry/start/consent/consent-provider.tsx",
+          "type": "registry:component",
+          "target": "components/consent/consent-provider.tsx"
+        },
+        {
+          "path": "src/registry/start/consent/consent-banner.tsx",
+          "type": "registry:component",
+          "target": "components/consent/consent-banner.tsx"
+        },
+        {
+          "path": "src/registry/start/consent/consent-einstellungen-knopf.tsx",
+          "type": "registry:component",
+          "target": "components/consent/consent-einstellungen-knopf.tsx"
+        },
+        {
+          "path": "src/registry/start/consent/einbettung.tsx",
+          "type": "registry:component",
+          "target": "components/consent/einbettung.tsx"
+        }
+      ]
+    },
+    {
+      "name": "einwilligung-nachweis",
+      "type": "registry:lib",
+      "title": "Einwilligungs-Nachweis",
+      "description": "Jede Einwilligung als Datensatz (Art. 7 Abs. 1 DSGVO, Pflichtkern 12): Server-Action mit Secret-Key, prüft jeden Wert, ohne IP und Browser. Migration einwilligungen mit RLS ohne anon-Rechte und 36-Monats-Aufräumfunktion.",
+      "dependencies": [
+        "@supabase/supabase-js@^2"
+      ],
+      "registryDependencies": [
+        "jjokkln/growcore-ui/consent"
+      ],
+      "envVars": {
+        "NEXT_PUBLIC_SUPABASE_URL": "",
+        "SUPABASE_SECRET_KEY": ""
+      },
+      "files": [
+        {
+          "path": "src/registry/start/einwilligung-nachweis/einwilligung-nachweis.ts",
+          "type": "registry:lib",
+          "target": "lib/einwilligung-nachweis.ts"
+        },
+        {
+          "path": "src/registry/start/einwilligung-nachweis/einwilligungen.sql",
+          "type": "registry:file",
+          "target": "~/supabase/migrations/20261002120200_einwilligungen.sql"
+        }
+      ]
+    },
+    {
+      "name": "rechtsseiten",
+      "type": "registry:page",
+      "title": "Rechtsseiten",
+      "description": "Impressum (§ 5 DDG), Datenschutzerklärung (Art. 13 DSGVO, je Dienst aus site-config.dienste schaltbar) und Erklärung zur Barrierefreiheit mit Kontakt. Fehlende Pflichtangaben: Entwurfs-Hinweis, bei indexierbarer Seite Abbruch.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/rechtsseiten/rechtstexte.ts",
+          "type": "registry:lib",
+          "target": "lib/rechtstexte.ts"
+        },
+        {
+          "path": "src/registry/start/rechtsseiten/rechts-seite.tsx",
+          "type": "registry:component",
+          "target": "components/recht/rechts-seite.tsx"
+        },
+        {
+          "path": "src/registry/start/rechtsseiten/impressum.tsx",
+          "type": "registry:page",
+          "target": "app/impressum/page.tsx"
+        },
+        {
+          "path": "src/registry/start/rechtsseiten/datenschutz.tsx",
+          "type": "registry:page",
+          "target": "app/datenschutz/page.tsx"
+        },
+        {
+          "path": "src/registry/start/rechtsseiten/barrierefreiheit.tsx",
+          "type": "registry:page",
+          "target": "app/barrierefreiheit/page.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fehlerseiten",
+      "type": "registry:page",
+      "title": "Fehlerseiten",
+      "description": "not-found (404), error (Wiederholen mit retry, Referenz per digest, keine technische Meldung) und global-error (eigenes html/body, ohne Tailwind, Dunkelmodus).",
+      "files": [
+        {
+          "path": "src/registry/start/fehlerseiten/fehler-flaeche.tsx",
+          "type": "registry:component",
+          "target": "components/fehler/fehler-flaeche.tsx"
+        },
+        {
+          "path": "src/registry/start/fehlerseiten/not-found.tsx",
+          "type": "registry:page",
+          "target": "app/not-found.tsx"
+        },
+        {
+          "path": "src/registry/start/fehlerseiten/error.tsx",
+          "type": "registry:page",
+          "target": "app/error.tsx"
+        },
+        {
+          "path": "src/registry/start/fehlerseiten/global-error.tsx",
+          "type": "registry:page",
+          "target": "app/global-error.tsx"
+        }
+      ]
+    },
+    {
+      "name": "supabase-clients",
+      "type": "registry:lib",
+      "title": "Supabase-Clients",
+      "description": "Drei Clients, nie vermischt: Browser, Server (Cookies, RLS) und Admin (geheimer Schlüssel, server-only). Dazu Sitzungs-Auffrischung für den Proxy und der Abfragezähler, der beim Entwickeln je Seitenaufruf Abfragen und Runden meldet.",
+      "dependencies": [
+        "@supabase/ssr@^0.12.7",
+        "@supabase/supabase-js@^2.117.2",
+        "server-only"
+      ],
+      "envVars": {
+        "NEXT_PUBLIC_SUPABASE_URL": "",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "",
+        "SUPABASE_SECRET_KEY": ""
+      },
+      "files": [
+        {
+          "path": "src/registry/start/supabase-clients/umgebung.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/umgebung.ts"
+        },
+        {
+          "path": "src/registry/start/supabase-clients/client.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/client.ts"
+        },
+        {
+          "path": "src/registry/start/supabase-clients/server.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/server.ts"
+        },
+        {
+          "path": "src/registry/start/supabase-clients/admin.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/admin.ts"
+        },
+        {
+          "path": "src/registry/start/supabase-clients/sitzung.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/sitzung.ts"
+        },
+        {
+          "path": "src/registry/start/supabase-clients/query-budget.ts",
+          "type": "registry:lib",
+          "target": "lib/supabase/query-budget.ts"
+        }
+      ],
+      "docs": "Supabase-Projekt in Frankfurt (eu-central-1). In .env.local: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (sb_publishable_…), SUPABASE_SECRET_KEY (sb_secret_…, nur Server). Mit Anmeldung: src/proxy.ts anlegen, Vorlage im Kopf von src/lib/supabase/sitzung.ts. Danach `npx shadcn@latest add jjokkln/growcore-ui/supabase-sparsamkeit`."
+    },
+    {
+      "name": "supabase-sparsamkeit",
+      "type": "registry:file",
+      "title": "Supabase-Sparsamkeit (Test)",
+      "description": "Test, der teure Ladewege rot macht: Abfragebudget je Seite mit Sperrklinke, kein count im Layout, Proxy nur mit Memo, Signieren nur über den gecachten Weg, getClaims statt getUser, beide Server-Clients am Zähler.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/supabase-clients"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/supabase-sparsamkeit/supabase-sparsamkeit.test.mjs",
+          "type": "registry:file",
+          "target": "~/scripts/supabase-sparsamkeit.test.mjs"
+        }
+      ],
+      "docs": "Ausführen: `node --test scripts/*.test.mjs`. Empfohlen in package.json: \"test\": \"node --test scripts/*.test.mjs\". Anpassen nur die vier Listen oben in der Datei; ein neues Projekt lässt SEITEN_UEBER_BUDGET leer."
+    },
+    {
+      "name": "lead-formular",
+      "type": "registry:block",
+      "title": "Lead-Formular",
+      "description": "Kontaktformular mit Art.-13-Hinweis: Server Action mit Zod, Insert in leads über den Admin-Client, Honigfalle und Zeitfalle, Rate-Limit in der Datenbank, Benachrichtigung und Eingangsbestätigung per SMTP (Nodemailer). Migration mit RLS ohne anon-Zugriff.",
+      "dependencies": [
+        "zod@^4.1.0",
+        "nodemailer@^10.0.0"
+      ],
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config",
+        "jjokkln/growcore-ui/supabase-clients",
+        "jjokkln/growcore-ui/aktion-knopf"
+      ],
+      "envVars": {
+        "SMTP_HOST": "",
+        "SMTP_PORT": "465",
+        "SMTP_USER": "",
+        "SMTP_PASS": "",
+        "SMTP_FROM": ""
+      },
+      "files": [
+        {
+          "path": "src/registry/start/lead-formular/schema.ts",
+          "type": "registry:lib",
+          "target": "lib/lead/schema.ts"
+        },
+        {
+          "path": "src/registry/start/lead-formular/schutz.ts",
+          "type": "registry:lib",
+          "target": "lib/lead/schutz.ts"
+        },
+        {
+          "path": "src/registry/start/lead-formular/mail.ts",
+          "type": "registry:lib",
+          "target": "lib/lead/mail.ts"
+        },
+        {
+          "path": "src/registry/start/lead-formular/aktion.ts",
+          "type": "registry:file",
+          "target": "app/actions/lead.ts"
+        },
+        {
+          "path": "src/registry/start/lead-formular/lead-formular.tsx",
+          "type": "registry:component",
+          "target": "components/lead-formular.tsx"
+        },
+        {
+          "path": "src/registry/start/lead-formular/lead-formular-felder.tsx",
+          "type": "registry:component",
+          "target": "components/lead-formular-felder.tsx"
+        },
+        {
+          "path": "src/registry/start/lead-formular/leads.sql",
+          "type": "registry:file",
+          "target": "~/supabase/migrations/20261002120000_leads.sql"
+        }
+      ],
+      "docs": "1. Migration supabase/migrations/20261002120000_leads.sql anwenden (in ein Bestandsprojekt: Datei vorher auf das heutige Datum umbenennen), danach get_advisors. 2. SMTP_* in .env.local und Vercel (Resend-Relay: smtp.resend.com, Port 465, Benutzer resend, Passwort = API-Schlüssel, SMTP_FROM auf der verifizierten Domain). Empfänger: kontakt.email aus der site-config oder LEAD_EMPFAENGER. 3. `<LeadFormular />` einbauen. 4. site-config dienste.datenbank und dienste.mail setzen, Datenschutzerklärung um Formular, Rate-Limit (HMAC der IP, max. 1 Tag) und Speicherdauer ergänzen. 5. Strecke einmal echt auslösen: Zeile in leads, benachrichtigt_am gesetzt, Mail beim Kunden, Bestätigung beim Absender (Pflichtkern 8)."
+    },
+    {
+      "name": "audit-log",
+      "type": "registry:lib",
+      "title": "Audit-Log mit Abdeckungstest",
+      "description": "Audit-Log nach Pflichtkern 12: Tabelle nur anhängen (Trigger, keine Rechte für anon/authenticated), logAudit in einem normalen Modul, Beschriftungen als Record über die Aktions-Union, Betroffener als Pflicht-Fremdschlüssel, Abdeckungstest über alle schreibenden Server-Funktionen.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/supabase-clients"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/audit-log/aktionen.ts",
+          "type": "registry:lib",
+          "target": "lib/audit/aktionen.ts"
+        },
+        {
+          "path": "src/registry/start/audit-log/protokoll.ts",
+          "type": "registry:lib",
+          "target": "lib/audit/protokoll.ts"
+        },
+        {
+          "path": "src/registry/start/audit-log/audit-abdeckung.test.mjs",
+          "type": "registry:file",
+          "target": "~/scripts/audit-abdeckung.test.mjs"
+        },
+        {
+          "path": "src/registry/start/audit-log/audit_logs.sql",
+          "type": "registry:file",
+          "target": "~/supabase/migrations/20261002120100_audit_logs.sql"
+        }
+      ],
+      "docs": "1. Migration supabase/migrations/20261002120100_audit_logs.sql anwenden (Bestandsprojekt: auf heutiges Datum umbenennen), danach get_advisors. 2. AuditAktion, PersonenEntitaet und SonstigeEntitaet in src/lib/audit/aktionen.ts fachlich neu schreiben, paarweise denken. 3. In jeder schreibenden Server Action nach dem gezählten Schreibvorgang `await logAudit({...})`. 4. `node --test scripts/*.test.mjs`: Der Abdeckungstest meldet jede schreibende Funktion ohne Protokoll; Ausnahme nur mit `// audit-ausnahme: <Begründung>` im Rumpf. 5. Zweck und Frist des Protokolls in die Datenschutzerklärung."
+    },
+    {
+      "name": "rollen-testleiste",
+      "type": "registry:block",
+      "title": "Rollen-Testleiste",
+      "description": "Entwicklerleiste nur auf dem eigenen Rechner (NODE_ENV und DEV_TOOLBAR=1): Kontowechsel als echte Anmeldung, RLS-Zähler der Sitzung mit Fehler statt 0, Prüfkonten auf .test anlegen, Sperre der Prüfkonten im Betrieb, Vertragstest.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/supabase-clients"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/rollen-testleiste/konten.ts",
+          "type": "registry:lib",
+          "target": "lib/dev/konten.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/freigabe.ts",
+          "type": "registry:lib",
+          "target": "lib/dev/freigabe.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/zustand.ts",
+          "type": "registry:lib",
+          "target": "lib/dev/zustand.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/anlegen.ts",
+          "type": "registry:lib",
+          "target": "lib/dev/anlegen.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/produktions-sperre.ts",
+          "type": "registry:lib",
+          "target": "lib/dev/produktions-sperre.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/dev-leiste-aktionen.ts",
+          "type": "registry:file",
+          "target": "app/actions/dev-leiste-aktionen.ts"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/dev-leiste.tsx",
+          "type": "registry:component",
+          "target": "components/dev/dev-leiste.tsx"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/dev-leiste-client.tsx",
+          "type": "registry:component",
+          "target": "components/dev/dev-leiste-client.tsx"
+        },
+        {
+          "path": "src/registry/start/rollen-testleiste/dev-leiste.test.mjs",
+          "type": "registry:file",
+          "target": "~/scripts/dev-leiste.test.mjs"
+        }
+      ],
+      "docs": "1. `<DevLeiste />` als erstes Kind von <body> im Wurzel-Layout. 2. .env.local: DEV_TOOLBAR=1 und DEV_ACCOUNT_PASSWORD (lang, zufällig); nie in Vercel setzen. 3. Rollen und Konten in src/lib/dev/konten.ts anpassen, Tabellen für die Zähler in GEZAEHLT (src/lib/dev/zustand.ts). 4. Leiste öffnen, „Prüfkonten anlegen“. 5. Sperre im Betrieb: istGesperrtesPruefkonto() in src/proxy.ts einbauen (Vorlage im Kopf von src/lib/dev/produktions-sperre.ts), und Prüfkonten nie gegen die Produktionsdatenbank ohne diese Sperre."
+    },
+    {
+      "name": "start-rahmen",
+      "type": "registry:component",
+      "title": "Seitenrahmen",
+      "description": "Rahmen jeder Seite: Einwilligung mit Nachweis, Banner und Fuß mit Impressum, Datenschutz, Barrierefreiheit und Widerruf.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/consent",
+        "jjokkln/growcore-ui/einwilligung-nachweis",
+        "jjokkln/growcore-ui/site-config"
+      ],
+      "files": [
+        {
+          "path": "src/registry/start/start-rahmen/seiten-rahmen.tsx",
+          "type": "registry:component",
+          "target": "components/start/seiten-rahmen.tsx"
+        }
+      ],
+      "docs": "In src/app/layout.tsx innerhalb von <body>: <SeitenRahmen>{children}</SeitenRahmen>."
+    },
+    {
+      "name": "website-start",
+      "type": "registry:item",
+      "title": "Startpaket Website",
+      "description": "Alles, was jede GrowCore-Website ab Tag 1 hat: Site-Config, Basis-URL, SEO-Kern, Schriften, Consent mit Nachweis, Rechtsseiten, Fehlerseiten, Supabase-Clients mit Sparsamkeitstest, Lead-Formular, Seitenrahmen und Motion-Kern.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config",
+        "jjokkln/growcore-ui/basis-url",
+        "jjokkln/growcore-ui/seo-kern",
+        "jjokkln/growcore-ui/fonts",
+        "jjokkln/growcore-ui/consent",
+        "jjokkln/growcore-ui/einwilligung-nachweis",
+        "jjokkln/growcore-ui/rechtsseiten",
+        "jjokkln/growcore-ui/fehlerseiten",
+        "jjokkln/growcore-ui/supabase-clients",
+        "jjokkln/growcore-ui/supabase-sparsamkeit",
+        "jjokkln/growcore-ui/start-rahmen",
+        "jjokkln/growcore-ui/bewegung",
+        "jjokkln/growcore-ui/seitenwechsel",
+        "jjokkln/growcore-ui/platzhalter",
+        "jjokkln/growcore-ui/aktion-knopf",
+        "jjokkln/growcore-ui/meldung",
+        "jjokkln/growcore-ui/lead-formular",
+        "jjokkln/growcore-ui/auftritt"
+      ],
+      "files": []
+    },
+    {
+      "name": "app-start",
+      "type": "registry:item",
+      "title": "Startpaket App",
+      "description": "Grundausstattung jeder GrowCore-App mit Konten: wie website-start ohne Lead-Formular, dazu Audit-Log mit Abdeckungstest und Rollen-Testleiste. Anmeldung, Rollen und RLS nach SOP „App mit Rollen aufsetzen“.",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/site-config",
+        "jjokkln/growcore-ui/basis-url",
+        "jjokkln/growcore-ui/seo-kern",
+        "jjokkln/growcore-ui/fonts",
+        "jjokkln/growcore-ui/consent",
+        "jjokkln/growcore-ui/einwilligung-nachweis",
+        "jjokkln/growcore-ui/rechtsseiten",
+        "jjokkln/growcore-ui/fehlerseiten",
+        "jjokkln/growcore-ui/supabase-clients",
+        "jjokkln/growcore-ui/supabase-sparsamkeit",
+        "jjokkln/growcore-ui/start-rahmen",
+        "jjokkln/growcore-ui/bewegung",
+        "jjokkln/growcore-ui/seitenwechsel",
+        "jjokkln/growcore-ui/platzhalter",
+        "jjokkln/growcore-ui/aktion-knopf",
+        "jjokkln/growcore-ui/meldung",
+        "jjokkln/growcore-ui/audit-log",
+        "jjokkln/growcore-ui/rollen-testleiste",
+        "jjokkln/growcore-ui/anmeldung",
+        "jjokkln/growcore-ui/reiter"
+      ],
+      "files": []
     }
   ]
 }

@@ -1,11 +1,12 @@
-// Die eine Stelle, an der GSAP angemeldet wird. Alle Bausteine importieren gsap von hier, nie
-// direkt aus 'gsap'. Plugins, die nur ein Baustein braucht (Flip, SplitText, DrawSVG …), meldet
-// dieser Baustein selbst mit registriere() an, damit sie nur dort im Bundle landen.
-// Gebündelt über npm: kein Request an einen Dritten (Pflichtkern 3/4).
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { DAUER, KURVE } from './tokens'
+
+// Die eine Stelle, an der GSAP angemeldet wird. Alle Bausteine importieren gsap von hier, nie
+// direkt aus 'gsap'. Plugins, die nur ein Baustein braucht (Flip, SplitText, DrawSVG …), meldet
+// dieser Baustein selbst mit registriere() an, damit sie nur dort im Bundle landen.
+// Gebündelt über npm: kein Request an einen Dritten (Pflichtkern 3/4).
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(useGSAP, ScrollTrigger)
