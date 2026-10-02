@@ -25,6 +25,10 @@ Importe sonst falsch um), Migrationszeitstempel eindeutig halten.
   hängt es einmal in den `<head>` und entdoppelt es. So reist es mit der Datei.
 - `src/app/`: `/` Handbuch, `/handbuch/<slug>` Kapitel mit Live-Beispiel, `/bausteine` alle Bausteine,
   `/tokens` Kurvenvergleich. `noindex`, noch nicht öffentlich betrieben (Impressum fehlt).
+- `/referenzen`: echte Kundenseiten nach Branche, **nur lokal**. Liste `lokal/referenzen.json`,
+  Bilder `public/lokal/referenzen/<id>.jpg`, beide gitignoriert (öffentliches Repo). Ohne die Datei
+  kein Nav-Link. Neue Seite: Eintrag in die JSON, dann
+  `node ~/.claude/tools/ui-verify/referenzen-bilder.mjs <id>`.
 
 **Prüfen**
 - `npm run lint && npm run build`
