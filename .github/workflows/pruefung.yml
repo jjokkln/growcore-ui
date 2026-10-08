@@ -1,0 +1,32 @@
+# Zentrale GrowCore-Prüfung. Kundenprojekte rufen sie auf, statt sie zu kopieren:
+#
+#   jobs:
+#     pruefung:
+#       uses: jjokkln/growcore-ui/.github/workflows/pruefung.yml@main
+#
+# Eine Änderung an pruefung/pruefe.mjs gilt damit beim nächsten Push in jedem
+# Projekt, ohne dass ein einziges Projekt angefasst wird. Das Repo ist öffentlich,
+# deshalb dürfen auch private Repos anderer Konten diesen Workflow aufrufen.
+name: growcore-pruefung
+
+on:
+  workflow_call:
+    inputs:
+      live:
+        description: "Vor dem Livegang: Platzhalter sind Fehler"
+        type: boolean
+        default: false
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: jjokkln/growcore-ui
+          path: .growcore-ui
+          sparse-checkout: pruefung
+      - name: GrowCore-Regeln prüfen
+        run: node .growcore-ui/pruefung/pruefe.mjs . ${{ inputs.live && '--live' || '' }}

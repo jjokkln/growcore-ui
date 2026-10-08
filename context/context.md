@@ -14,6 +14,12 @@ create-next-app, `shadcn init -d -y`, `shadcn add jjokkln/growcore-ui/website-st
 `npm run lint && npm test && npm run build`. Zwei Dateien eines Eintrags nie gleich benennen (shadcn biegt
 Importe sonst falsch um), Migrationszeitstempel eindeutig halten.
 
+**Prüfung:** `pruefung/pruefe.mjs` (Regeln als Code, ohne Abhängigkeiten) und der wiederverwendbare
+Workflow `.github/workflows/pruefung.yml`. Projekte rufen ihn über den Baustein `pruefung` auf
+(`~/.github/workflows/growcore.yml`), kopieren ihn also nicht. Neue Regel: Eintrag in `PRUEFUNGEN`,
+dann gegen alle Projekte laufen lassen, bevor gepusht wird. Jeder Push hier ändert die Prüfung
+aller Projekte.
+
 **Aufbau**
 - `registry.json`: die Liste der Bausteine. Pfade zeigen auf die echten Dateien der Demo-App,
   daher gibt es keine zweite Kopie.

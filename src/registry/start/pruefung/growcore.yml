@@ -1,0 +1,14 @@
+# GrowCore-Prüfung: Pflichtseiten, lokale Schriften, keine .env im Repo,
+# Service-Role nie im Browser, Tracking nur mit Einwilligung, SEO-Dateien.
+# Die Regeln liegen zentral in jjokkln/growcore-ui/pruefung/pruefe.mjs.
+# Lokal: node ~/Code_Aktuell/GrowCore/growcore-ui/pruefung/pruefe.mjs .
+# Ausnahmen mit Grund und den Projekttyp in .growcore-pruefung.json.
+name: GrowCore-Prüfung
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pruefung:
+    uses: jjokkln/growcore-ui/.github/workflows/pruefung.yml@main

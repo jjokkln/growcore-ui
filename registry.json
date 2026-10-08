@@ -867,10 +867,23 @@
       "docs": "In src/app/layout.tsx innerhalb von <body>: <SeitenRahmen>{children}</SeitenRahmen>."
     },
     {
+      "name": "pruefung",
+      "type": "registry:file",
+      "title": "GrowCore-Prüfung",
+      "description": "GitHub-Action, die bei jedem Push die zentralen GrowCore-Regeln prüft (pruefung/pruefe.mjs): Pflichtseiten, lokale Schriften, keine .env im Repo, Service-Role nie im Browser, Tracking nur mit Einwilligung, robots und sitemap.",
+      "files": [
+        {
+          "path": "src/registry/start/pruefung/growcore.yml",
+          "type": "registry:file",
+          "target": "~/.github/workflows/growcore.yml"
+        }
+      ]
+    },
+    {
       "name": "website-start",
       "type": "registry:item",
       "title": "Startpaket Website",
-      "description": "Alles, was jede GrowCore-Website ab Tag 1 hat: Site-Config, Basis-URL, SEO-Kern, Schriften, Consent mit Nachweis, Rechtsseiten, Fehlerseiten, Supabase-Clients mit Sparsamkeitstest, Lead-Formular, Seitenrahmen und Motion-Kern.",
+      "description": "Alles, was jede GrowCore-Website ab Tag 1 hat: Site-Config, Basis-URL, SEO-Kern, Schriften, Consent mit Nachweis, Rechtsseiten, Fehlerseiten, Supabase-Clients mit Sparsamkeitstest, Lead-Formular, Seitenrahmen und Motion-Kern, dazu die GrowCore-Prüfung als GitHub-Action.",
       "registryDependencies": [
         "jjokkln/growcore-ui/site-config",
         "jjokkln/growcore-ui/basis-url",
@@ -889,7 +902,8 @@
         "jjokkln/growcore-ui/aktion-knopf",
         "jjokkln/growcore-ui/meldung",
         "jjokkln/growcore-ui/lead-formular",
-        "jjokkln/growcore-ui/auftritt"
+        "jjokkln/growcore-ui/auftritt",
+        "jjokkln/growcore-ui/pruefung"
       ],
       "files": []
     },
@@ -897,7 +911,7 @@
       "name": "app-start",
       "type": "registry:item",
       "title": "Startpaket App",
-      "description": "Grundausstattung jeder GrowCore-App mit Konten: wie website-start ohne Lead-Formular, dazu Audit-Log mit Abdeckungstest und Rollen-Testleiste. Anmeldung, Rollen und RLS nach SOP „App mit Rollen aufsetzen“.",
+      "description": "Grundausstattung jeder GrowCore-App mit Konten: wie website-start ohne Lead-Formular, dazu Audit-Log mit Abdeckungstest und Rollen-Testleiste. Anmeldung, Rollen und RLS nach SOP „App mit Rollen aufsetzen“, dazu die GrowCore-Prüfung als GitHub-Action.",
       "registryDependencies": [
         "jjokkln/growcore-ui/site-config",
         "jjokkln/growcore-ui/basis-url",
@@ -918,7 +932,8 @@
         "jjokkln/growcore-ui/audit-log",
         "jjokkln/growcore-ui/rollen-testleiste",
         "jjokkln/growcore-ui/anmeldung",
-        "jjokkln/growcore-ui/reiter"
+        "jjokkln/growcore-ui/reiter",
+        "jjokkln/growcore-ui/pruefung"
       ],
       "files": []
     }

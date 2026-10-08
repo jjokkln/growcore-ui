@@ -28,6 +28,21 @@ fehlerseiten, supabase-clients, supabase-sparsamkeit, start-rahmen, Motion-Kern;
 (von der Demo-App ausgenommen). Kopfkommentare stehen dort hinter den Importen, weil shadcn
 Kommentare vor der ersten Anweisung beim Einbau entfernt.
 
+## Prüfung
+
+`pruefung/pruefe.mjs` prüft die Regeln, die jedes Projekt einhält, als Code: Pflichtseiten
+(Impressum, Datenschutz, Barrierefreiheit), `lang="de"`, lokale Schriften, keine `.env` im Repo,
+Service-Role nie im Browser, Tracking nur mit Einwilligung, robots und sitemap, dazu Hinweise
+zu metadataBase, Region `fra1`, Platzhaltern und `alt`. Ohne Abhängigkeiten, unter einer Sekunde.
+
+```bash
+node pruefung/pruefe.mjs <projekt>          # --live: Platzhalter sind Fehler · --json
+```
+
+Die Startpakete bringen `.github/workflows/growcore.yml` mit, das den zentralen Workflow
+`.github/workflows/pruefung.yml` aufruft. Eine neue Regel hier gilt beim nächsten Push in jedem
+Projekt. Projekttyp und Ausnahmen (mit Grund) stehen in `.growcore-pruefung.json` im Projekt.
+
 ## Bausteine
 
 | Name | Was |
