@@ -126,11 +126,11 @@ const PRUEFUNGEN = [
   },
   {
     id: "sprache", stufe: "fehler", gilt: ["website", "app", "werkzeug"],
-    text: '<html lang="de">',
-    test: () =>
-      treffer(/<html[^>]*\blang=\{?["'`]de/).length || !treffer(/<html[\s>]/).length
-        ? null
-        : `<html> ohne lang="de" in ${zeige(treffer(/<html[\s>]/))}`,
+    text: '<html lang="de"> (mehrsprachig: lang={locale})',
+    test: () => {
+      const ohne = treffer(/<html[\s>]/).filter((d) => !/<html[^>]*\blang=(\{?["'`]de|\{\s*[a-zA-Z_])/.test(d.text));
+      return ohne.length ? `<html> ohne lang="de" in ${zeige(ohne)}` : null;
+    },
   },
   {
     id: "schriften-lokal", stufe: "fehler", gilt: ["website", "app"],
