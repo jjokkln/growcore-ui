@@ -37,7 +37,7 @@ const AUSLASSEN = new Set([
 ]);
 const CODE_ENDUNG = /\.(tsx?|jsx?|mjs|cjs|css|html)$/;
 /** Nur was ausgeliefert wird. Design-Übergaben, Skripte und Werkzeugordner zählen nicht. */
-const AUSLIEFERUNG = ["src", "app", "components", "lib", "pages", "public", "content", "styles", "hooks", "utils"];
+const AUSLIEFERUNG = ["src", "app", "components", "lib", "pages", "public", "content", "styles", "hooks", "utils", "apps", "packages"];
 const NIE = /\.dc\.html$|\.(test|spec|stories)\.[jt]sx?$/;
 const TEST_DATEI = /(\.test\.|\.spec\.|__tests__|\/tests?\/|\/e2e\/)/;
 
