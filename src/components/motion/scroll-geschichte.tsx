@@ -14,7 +14,7 @@ const STIL = `
 .gc-gs-buehne{position:sticky;top:var(--kopf-hoehe,1rem);height:42vh;z-index:1}
 .gc-gs-bild{position:absolute;inset:0}
 .gc-gs-schritt{min-height:60vh;display:flex;flex-direction:column;justify-content:center}
-@media (min-width:768px){.gc-gs{grid-template-columns:1fr 1fr;gap:4rem}.gc-gs-buehne{height:calc(100vh - var(--kopf-hoehe,0px) - 4rem);top:calc(var(--kopf-hoehe,0px) + 2rem)}.gc-gs-schritt{min-height:80vh}}`
+@media (min-width:768px){.gc-gs{grid-template-columns:1fr 1fr;gap:4rem}.gc-gs-buehne{height:calc(100svh - var(--kopf-hoehe,0px) - 4rem);top:calc(var(--kopf-hoehe,0px) + 2rem)}.gc-gs-schritt{min-height:80vh}}`
 
 export type Schritt = { titel: string; text: React.ReactNode; bild: React.ReactNode }
 

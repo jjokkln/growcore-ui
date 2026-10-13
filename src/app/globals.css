@@ -45,6 +45,23 @@ body {
   outline-offset: 2px;
 }
 
+/* Handy-Grundlinie, Spiegel des Bausteins „handy-grundlinie“ (registry.json, Feld css). */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+input, textarea, select {
+  font-size: max(1rem, 16px);
+}
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+button, [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 /* Handbuch-Text: aus Markdown gerendert, Lesebreite 70ch. */
 .handbuch-text { max-width: 70ch; line-height: 1.7; }
 .handbuch-text h2 { margin: 3rem 0 1rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; }

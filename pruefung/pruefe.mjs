@@ -221,6 +221,39 @@ const PRUEFUNGEN = [
       return t.length ? `<img>/<Image> ohne alt in ${zeige(t)}` : null;
     },
   },
+  // Handy-Grundlinie (seit 2026-10-13, Baustein handy-grundlinie, launch-check 7e). Keiner dieser
+  // Fehler ist in der Geräte-Emulation sichtbar, deshalb prüft sie der Code.
+  {
+    id: "handy-zoom", stufe: "fehler", gilt: ["website", "app", "werkzeug"],
+    text: "Zoom nie gesperrt (user-scalable, maximum-scale)",
+    test: () => {
+      const t = treffer(/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(?![.\d])|userScalable\s*:\s*false|maximumScale\s*:\s*1(?![.\d])/);
+      return t.length ? `Zoom gesperrt in ${zeige(t)}; Ursache ist meist ein Eingabefeld unter 16 px, das behebt man` : null;
+    },
+  },
+  {
+    id: "handy-tap", stufe: "hinweis", gilt: ["website", "app"],
+    text: "Tap-Blitz aus (-webkit-tap-highlight-color)",
+    test: () => (treffer(/tap-highlight-color/).length ? null : "nirgends gesetzt; Baustein handy-grundlinie einbauen"),
+  },
+  {
+    id: "handy-hover", stufe: "hinweis", gilt: ["website", "app"],
+    text: "Hover in CSS nur unter @media (hover: hover)",
+    test: () => {
+      // Tailwind 4 kapselt hover: von selbst; rohes CSS mit :hover bleibt nach dem Antippen hängen.
+      const t = code.filter((d) => /\.css$/.test(d.pfad) && /:hover/.test(d.text) && !/\(hover:\s*hover\)/.test(d.text));
+      return t.length ? `:hover ohne (hover: hover) in ${zeige(t)}` : null;
+    },
+  },
+  {
+    id: "handy-hoehe", stufe: "hinweis", gilt: ["website", "app"],
+    text: "100dvh/100svh statt 100vh",
+    test: () => {
+      // min-h-screen ist harmlos (wächst mit), h-screen und height: 100vh schneiden unter der Adressleiste ab.
+      const t = treffer(/\b100vh\b|(?<!min-)\bh-screen\b/);
+      return t.length ? `100vh oder h-screen in ${zeige(t)}; App-Rahmen 100dvh, Hero 100svh` : null;
+    },
+  },
 ];
 
 const ergebnisse = [];

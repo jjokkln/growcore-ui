@@ -36,7 +36,7 @@ export default function GlobalerFehler({
       <body
         style={{
           margin: 0,
-          minHeight: '100vh',
+          minHeight: '100svh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
