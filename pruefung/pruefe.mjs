@@ -248,7 +248,7 @@ const PRUEFUNGEN = [
   {
     // Hinweis statt Fehler, solange Bestandsprojekte Treffer haben (2026-10-13: 11 von 15). Wird zum Fehler,
     // sobald `node pruefe.mjs` in allen Projekten null Treffer meldet; neue Projekte starten ohne Treffer.
-    id: "handy-grid", stufe: "hinweis", gilt: ["website", "app"],
+    id: "handy-grid", stufe: "fehler", gilt: ["website", "app"],
     text: "Grid mit Spalten ab sm/md/lg hat eine Basisspalte (grid-cols-1)",
     test: () => {
       // `grid md:grid-cols-2` ohne grid-cols-1 legt unterhalb von md eine implizite Spalte an, die auf die
