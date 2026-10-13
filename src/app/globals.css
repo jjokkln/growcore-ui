@@ -61,6 +61,14 @@ button, [role="button"] {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+/* Netz gegen seitliches Wischen: `grid md:grid-cols-2` ohne Basisspalte bekäme unterhalb von md eine implizite
+   auto-Spalte, die auf die Breite des breitesten Inhalts wächst. Muss in @layer base stehen: Ungeschichtetes CSS
+   schlägt in Tailwind 4 jede Utility, auch md:grid-cols-2. */
+@layer base {
+  :where(.grid:not([class*="grid-flow-col"])) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 
 /* Handbuch-Text: aus Markdown gerendert, Lesebreite 70ch. */
 .handbuch-text { max-width: 70ch; line-height: 1.7; }

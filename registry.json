@@ -870,7 +870,7 @@
       "name": "handy-grundlinie",
       "type": "registry:lib",
       "title": "Handy-Grundlinie",
-      "description": "Nimmt einer Website die Tells, an denen man auf dem Handy den Browser merkt: Tap-Blitz aus, Eingaben 16 px (kein Hineinzoomen), touch-action auf Bedienelementen, kein Textauswählen auf Knöpfen, Viewport mit viewport-fit=cover und theme-color je Farbschema. Hover bleibt Tailwind 4 (hover: hover). Prüfung: pruefe.mjs handy-*.",
+      "description": "Nimmt einer Website die Tells, an denen man auf dem Handy den Browser merkt: Tap-Blitz aus, Eingaben 16 px (kein Hineinzoomen), touch-action auf Bedienelementen, kein Textauswählen auf Knöpfen, Viewport mit viewport-fit=cover und theme-color je Farbschema. Jedes Grid hat von Haus aus eine schrumpfende Basisspalte (kein seitliches Wischen durch implizite Spalten). Hover bleibt Tailwind 4 (hover: hover). Prüfung: pruefe.mjs handy-*.",
       "files": [
         {
           "path": "src/registry/start/handy-grundlinie/viewport.ts",
@@ -894,10 +894,13 @@
             "user-select": "none",
             "-webkit-user-select": "none",
             "-webkit-touch-callout": "none"
+          },
+          ":where(.grid:not([class*=\"grid-flow-col\"]))": {
+            "grid-template-columns": "minmax(0, 1fr)"
           }
         }
       },
-      "docs": "In app/layout.tsx: export { viewport } from '@/lib/viewport'. Fixe Kopf-/Fußleisten und Sheets bekommen padding mit env(safe-area-inset-top|bottom). App-Rahmen 100dvh, Hero 100svh, nie 100vh. Vor dem Livegang auf einem echten Handy prüfen (launch-check 7e)."
+      "docs": "In app/layout.tsx: export { viewport } from '@/lib/viewport'. Fixe Kopf-/Fußleisten und Sheets bekommen padding mit env(safe-area-inset-top|bottom). App-Rahmen 100dvh, Hero 100svh, nie 100vh. Vor dem Livegang auf einem echten Handy prüfen (launch-check 7e). Grids: trotzdem grid-cols-1 als Basis schreiben (pruefe.mjs handy-grid); die CSS-Regel ist nur das Netz."
     },
     {
       "name": "schlimmstfall",

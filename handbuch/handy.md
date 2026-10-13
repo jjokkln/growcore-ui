@@ -36,6 +36,7 @@ Startpaket enthalten): CSS in `globals.css` und `lib/viewport.ts`, das
 | Langes Drücken markiert Knopftext | Text ist auswählbar | `user-select: none` nur auf Knöpfen, **nie auf `body`** |
 | Karussell scrollt die Seite | Browser rät die Achse | `touch-action: pan-y` auf dem Karussell, oder `scroll-snap` und gar kein JS |
 | Statusleiste in falscher Farbe | ein `theme-color` für beide Schemata | `themeColor` je `prefers-color-scheme` im `viewport`-Export |
+| Seite lässt sich nach rechts wischen, Karten ragen über den Rand | `grid md:grid-cols-2` ohne Basisspalte: unterhalb von `md` entsteht eine implizite Spalte, die auf den breitesten Inhalt wächst (Projektkarten 506 px auf 390 px) | **Immer `grid-cols-1` als Basis**: `grid grid-cols-1 gap-4 md:grid-cols-2`. Dazu `min-w-0` an Flex-Kindern mit langem Text. Prüfung `handy-grid`, Messung `ueberlauf.mjs` |
 | Im Browser richtig, auf dem Telefon falsch | Emulation kennt keins davon | Auf dem Gerät prüfen: Dev-Server auf `0.0.0.0`, per LAN-IP öffnen, Safari → Entwickler |
 
 ## Regeln
@@ -52,6 +53,7 @@ Startpaket enthalten): CSS in `globals.css` und `lib/viewport.ts`, das
 ## Prüfliste
 
 - `node pruefung/pruefe.mjs .` ohne `handy-*`-Fehler.
+- `node ~/.claude/tools/ui-verify/ueberlauf.mjs --base=<url> / /projekte …` bei 390 px: keine Seite läuft über (seitliches Wischen).
 - Auf einem echten Telefon, nicht dem neuesten: Knopf antippen (sofortige
   Rückmeldung, kein Blitz, kein hängender Hover), Eingabefeld antippen (kein
   Zoom, Tastatur verdeckt keinen Knopf), ganz oben ziehen (kein Neuladen in der

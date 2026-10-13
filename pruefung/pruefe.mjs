@@ -246,6 +246,30 @@ const PRUEFUNGEN = [
     },
   },
   {
+    // Hinweis statt Fehler, solange Bestandsprojekte Treffer haben (2026-10-13: 11 von 15). Wird zum Fehler,
+    // sobald `node pruefe.mjs` in allen Projekten null Treffer meldet; neue Projekte starten ohne Treffer.
+    id: "handy-grid", stufe: "hinweis", gilt: ["website", "app"],
+    text: "Grid mit Spalten ab sm/md/lg hat eine Basisspalte (grid-cols-1)",
+    test: () => {
+      // `grid md:grid-cols-2` ohne grid-cols-1 legt unterhalb von md eine implizite Spalte an, die auf die
+      // Breite des breitesten Inhalts wächst (iPhone, 2026-10-13: Karten 506 px auf 390 px, Seite seitlich
+      // wischbar). grid-cols-1 ist minmax(0,1fr) und lässt die Spalte schrumpfen.
+      const lauf = [];
+      for (const d of code.filter((x) => /\.(tsx|jsx)$/.test(x.pfad))) {
+        // Zeilennummern aus dem Rohtext (der kommentarlose Text hat Blockkommentare samt Zeilenumbruch verloren).
+        d.roh.split("\n").forEach((zeile, i) => {
+          if (/^\s*(\/\/|\*|\/\*)/.test(zeile)) return;
+          const fenster = zeile;
+          if (!/(?<![\w:-])grid(?![\w-])/.test(fenster)) return;
+          if (!/(sm|md|lg|xl|2xl):grid-cols-/.test(fenster)) return;
+          if (/(^|[\s"'`])grid-cols-/.test(fenster) || /grid-flow|grid-rows|grid-template|subgrid/.test(fenster)) return;
+          lauf.push(`${d.pfad}:${i + 1}`);
+        });
+      }
+      return lauf.length ? `${lauf.length} Grid(s) ohne grid-cols-1, z. B. ${lauf.slice(0, 3).join(", ")}` : null;
+    },
+  },
+  {
     id: "handy-hoehe", stufe: "hinweis", gilt: ["website", "app"],
     text: "100dvh/100svh statt 100vh",
     test: () => {
