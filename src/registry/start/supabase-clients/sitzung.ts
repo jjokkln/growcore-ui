@@ -25,8 +25,15 @@ import { oeffentlicherSchluessel, supabaseUrl } from '@/lib/supabase/umgebung'
 //   }
 //
 //   export const config = {
-//     matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)'],
+//     matcher: ['/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|llms.txt|\\.well-known|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml|json)$).*)'],
 //   }
+//
+// ⚠️ Soft-404 (gemessen 2026-10-13 an fünf Apps): Leitet der Proxy JEDE unbekannte Adresse auf
+// /login um, bekommen auch /llms.txt, /.well-known/ai-catalog.json und Tippfehler-URLs eine
+// HTML-Seite mit 200 statt 404. Lighthouse „Agentic Browsing“ fällt dann auf 50 %, Google zählt
+// Soft-404s. Darum die Ausnahmen oben, und besser: nur die geschützten Flächen umleiten
+// (z. B. request.nextUrl.pathname.startsWith('/admin')), alles andere mit `antwort` durchlassen,
+// damit Next selbst 404 antwortet. Beleg: curl -s -o /dev/null -w "%{http_code}" <url>/llms.txt → 404.
 
 export async function sitzungAuffrischen(request: NextRequest) {
   let antwort = NextResponse.next({ request })
