@@ -10,7 +10,7 @@ export default function Tokens() {
         Die einzigen Zahlen für Bewegung in einem Projekt. In TypeScript für GSAP, als CSS-Variablen für
         Übergänge und View Transitions. Ein Exit dauert rund 70 % des Enters.
       </p>
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
         <table className="w-full text-left text-sm">
           <thead className="text-leise"><tr><th className="py-2 font-normal">Dauer</th><th className="font-normal">Wert</th><th className="font-normal">wofür</th></tr></thead>
           <tbody className="divide-y divide-linie">

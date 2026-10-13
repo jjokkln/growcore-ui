@@ -14,7 +14,7 @@ export function Abschnitt({
 }) {
   return (
     <section id={name} className="scroll-mt-24 border-t border-linie py-16">
-      <div className="mb-8 grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
+      <div className="mb-8 grid grid-cols-1 gap-3 md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">{titel}</h2>
           <p className="mt-2 max-w-xl text-leise">{zweck}</p>

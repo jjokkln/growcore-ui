@@ -16,7 +16,7 @@ const knopfLeise = 'rounded-full border border-linie bg-flaeche px-4 py-2 text-s
 export function ZahlDemo() {
   const [wert, setWert] = useState(12480)
   return (
-    <div className="grid gap-6 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       <div className="rounded-xl border border-linie bg-flaeche p-6">
         <div className="text-sm text-leise">Anfragen im Jahr (Beispiel)</div>
         <Zahl wert={wert} className="mt-2 text-4xl font-semibold tracking-tight" />
@@ -131,7 +131,7 @@ export function ZeigerDemo() {
   const karte = useNeigung<HTMLDivElement>(6)
   const knopfFeiern = useRef<HTMLButtonElement>(null)
   return (
-    <div className="grid items-center gap-8 sm:grid-cols-3">
+    <div className="grid grid-cols-1 items-center gap-8 sm:grid-cols-3">
       <div className="grid place-items-center rounded-xl border border-linie bg-flaeche py-14">
         <button ref={magnet} className={knopf}>Projekt anfragen</button>
         <p className="mt-4 text-xs text-leise">useMagnet</p>
@@ -156,7 +156,7 @@ export function PlatzhalterDemo() {
   return (
     <div>
       <button className={`${knopfLeise} mb-5`} onClick={() => setLaedt((l) => !l)}>{laedt ? 'Daten zeigen' : 'Wieder laden'}</button>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[0, 1, 2].map((i) =>
           laedt ? (
             <PlatzhalterBereich key={i} className="rounded-xl border border-linie bg-flaeche p-5">

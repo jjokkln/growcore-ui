@@ -23,7 +23,7 @@ export default function Start() {
         return (
           <section key={g.id} className="border-t border-linie py-12">
             <h2 className="text-sm font-semibold text-leise">{g.titel}</h2>
-            <ul className="mt-6 grid gap-x-10 md:grid-cols-2">
+            <ul className="mt-6 grid grid-cols-1 gap-x-10 md:grid-cols-2">
               {kapitel.map((k) => (
                 <li key={k.slug} className="border-b border-linie">
                   <Link href={`/handbuch/${k.slug}`} className="group grid gap-1 py-4">

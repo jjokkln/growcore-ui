@@ -25,7 +25,7 @@ export default async function KapitelSeite({ params }: PageProps<'/handbuch/[slu
   const alle = alleKapitel()
 
   return (
-    <div className="grid gap-10 pt-10 lg:grid-cols-[13rem_1fr] lg:gap-14">
+    <div className="grid grid-cols-1 gap-10 pt-10 lg:grid-cols-[13rem_1fr] lg:gap-14">
       <nav aria-label="Kapitel" className="hidden lg:block">
         <div className="sticky top-24 grid gap-6 text-sm">
           {GRUPPEN.map((g) => (

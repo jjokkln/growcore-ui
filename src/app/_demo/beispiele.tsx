@@ -17,7 +17,7 @@ const BUEHNE = ['bg-akzent', 'bg-tinte', 'bg-[#1f6f55]']
 export function AuftrittBeispiel() {
   return (
     <Auftritt beimScrollen>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {KARTEN.map((k) => (
           <div key={k.t} data-auftritt className="rounded-xl border border-linie bg-flaeche p-5">
             <div className="font-medium">{k.t}</div>
@@ -96,7 +96,7 @@ export function SvgBeispiel() {
 
 export function PlatzhalterStatisch() {
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {[0, 1, 2].map((i) => (
         <PlatzhalterBereich key={i} className="rounded-xl border border-linie bg-flaeche p-5">
           <Platzhalter className="h-32 w-full" />

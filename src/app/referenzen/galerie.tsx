@@ -52,7 +52,7 @@ export function Galerie({ kategorien, eintraege }: { kategorien: Kategorie[]; ei
         {gruppen.map((k) => (
           <section key={k.id} aria-labelledby={`kat-${k.id}`}>
             <h2 id={`kat-${k.id}`} className="mb-5 text-xl font-semibold tracking-tight">{k.titel}</h2>
-            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {eintraege.filter((e) => e.kategorie === k.id).map((e) => {
                 const { host, vorschau } = adresse(e.url)
                 return (

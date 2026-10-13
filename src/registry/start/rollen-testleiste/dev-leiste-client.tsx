@@ -121,7 +121,7 @@ export function DevLeisteClient({
             </p>
           ) : null}
 
-          <div className="grid gap-x-6 gap-y-4 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-3">
             <Abschnitt titel="Konto wechseln">
               {daten === null ? (
                 <p className="text-[12px] text-amber-200/50">Lade …</p>

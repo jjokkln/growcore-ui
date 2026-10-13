@@ -42,7 +42,7 @@ export function MonatsrasterDemo() {
   const [eintraege] = useState(beispielEintraege)
   const liste = tag ? eintraege[tagSchluessel(tag)] ?? [] : []
   return (
-    <div className={`${rahmen} grid gap-6 md:grid-cols-[22rem_1fr] [--kalender-akzent:var(--akzent)] [--kalender-akzent-text:#fff]`}>
+    <div className={`${rahmen} grid grid-cols-1 gap-6 md:grid-cols-[22rem_1fr] [--kalender-akzent:var(--akzent)] [--kalender-akzent-text:#fff]`}>
       <Monatsraster wert={tag} beiWahl={setTag} eintraege={eintraege} nichtWaehlbar={(d) => d.getDay() === 0} />
       <div aria-live="polite">
         <div className="text-sm text-leise">{tag ? tag.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Einen Tag wählen'}</div>
@@ -192,7 +192,7 @@ export function WizardDemo() {
 
 export function AnmeldungDemo() {
   return (
-    <div className={`${rahmen} grid gap-6 md:grid-cols-[1fr_16rem] [--knopf-bg:var(--tinte)] [--knopf-text:var(--papier)]`}>
+    <div className={`${rahmen} grid grid-cols-1 gap-6 md:grid-cols-[1fr_16rem] [--knopf-bg:var(--tinte)] [--knopf-text:var(--papier)]`}>
       <Anmeldung
         passwortVergessen="#"
         beiAnmelden={async ({ passwort }) => {
@@ -269,7 +269,7 @@ const BILD = (n: number, alt: string) => (
 
 export function BildEnthuellungDemo() {
   return (
-    <div className="grid gap-6 md:grid-cols-[3fr_2fr]">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-[3fr_2fr]">
       <BildEnthuellung>{BILD(1, 'Beispielbild in Blau')}</BildEnthuellung>
       <BildEnthuellung von="unten" scrub>{BILD(2, 'Beispielbild in Grün')}</BildEnthuellung>
     </div>
