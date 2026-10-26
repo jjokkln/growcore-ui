@@ -37,8 +37,12 @@ export function TextAuftritt({
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, (ctx) => {
-        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
-        if (!bewegungErlaubt()) return
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts). Gleich
+        // freigeben: Die Regel in STIL hält den Text sonst unsichtbar (gemessen 2026-10-26).
+        if (!bewegungErlaubt()) {
+          el.dataset.textAuftritt = 'bereit'
+          return
+        }
         let aktiv = true
         document.fonts.ready.then(() => {
           if (!aktiv) return
@@ -49,7 +53,8 @@ export function TextAuftritt({
               autoSplit: true,
               onSplit(self) {
                 el.dataset.textAuftritt = 'bereit'
-                if (gespielt.current) return
+                // Schalter kam, während die Schriften noch luden: zeigen statt spielen.
+                if (gespielt.current || !bewegungErlaubt()) return
                 return gsap.from(art === 'zeilen' ? self.lines : self.words, {
                   yPercent: 110,
                   duration: DAUER.lg,

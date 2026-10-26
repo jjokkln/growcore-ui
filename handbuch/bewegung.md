@@ -169,9 +169,15 @@ useGSAP(() => {
   wirkt genauso. Er setzt `data-a11y-stop-animations` am `<html>`, und das bremst
   von sich aus nur CSS. Der Kern `bewegung` prüft es deshalb selbst:
   `bewegungErlaubt()` ist bei gesetztem Attribut `false`, und ein Beobachter in
-  `lib/motion/gsap.ts` löst beim Umschalten alle Trigger, lässt Auftritte ans Ende
-  springen und stellt scrollgebundene Effekte auf den Anfang. Wer eine Bewegung
-  nicht über `matchMedia(BEWEGUNG)` startet, fragt `bewegungErlaubt()`.
+  `lib/motion/gsap.ts` bringt beim Umschalten im nächsten Frame alles in den
+  Endzustand: Er löst die Trigger, setzt scrollgebundene Effekte (`scrub`) in den
+  Zustand von „Bewegung reduzieren“ zurück und spult alles Übrige auf der obersten
+  Ebene ans Ende, ganze Timelines und Endlosschleifen eingeschlossen. Einzelne
+  Tweens in einer Timeline vorzuspulen reicht nicht: Die Timeline setzt sie im
+  nächsten Tick zurück und spielt weiter. Angehaltene Timelines (ein vorbereitetes
+  Menü) bleiben, wie sie sind. Wer eine Bewegung nicht über `matchMedia(BEWEGUNG)`
+  startet oder sie erst später erzeugt (Klick, Schrittwechsel, Batch-Trigger),
+  fragt `bewegungErlaubt()` in dem Moment, in dem sie startet.
 - **Anhalten können:** Was sich länger als 5 Sekunden von selbst bewegt (Laufband,
   Endlosschleife), hat einen sichtbaren Knopf zum Anhalten (WCAG 2.2.2).
 - **Keine großen Bewegungen im Sichtfeld:** starke Parallaxe, Zoom über den ganzen

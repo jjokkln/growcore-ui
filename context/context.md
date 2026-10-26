@@ -26,9 +26,13 @@ aller Projekte.
 - `src/lib/motion/gsap.ts`: einzige Registrierungsstelle für GSAP (Kern-Baustein `bewegung`).
   Plugins, die nur ein Baustein braucht, registriert dieser selbst mit `registriere()`.
   `bewegungErlaubt()` beachtet auch den Panel-Schalter `data-a11y-stop-animations`
-  (@growcore/a11y), ein MutationObserver hält beim Umschalten alles an. Jeder Baustein prüft
-  `bewegungErlaubt()` zusätzlich in seinem `mm.add(BEWEGUNG, …)`, sonst tritt nach einem
-  Seitenwechsel die neue Seite trotz Schalter auf (gemessen 2026-10-26).
+  (@growcore/a11y), ein MutationObserver hält beim Umschalten alles an: Trigger lösen, `scrub`-
+  Animationen per `revert()` in den Ruhezustand, sonst die **oberste Ebene** der globalen Timeline
+  per `totalProgress(1)` ans Ende (Angehaltenes und Aufrufe ohne Dauer ausgenommen). Nie einzelne
+  Tweens in einer Timeline vorspulen: Die Timeline setzt sie im nächsten Tick zurück (gemessen
+  2026-10-26, 43,9 statt 100). Jeder Baustein prüft `bewegungErlaubt()` zusätzlich in seinem
+  `mm.add(BEWEGUNG, …)`, sonst tritt nach einem Seitenwechsel die neue Seite trotz Schalter auf
+  (gemessen 2026-10-26), und in jedem Rückruf, der später eine Bewegung startet.
 - Seitenwechsel: in `src/app/template.tsx`, nicht im Layout (Template legt sich je Navigation neu an).
 - `src/lib/motion/tokens.ts`: `DAUER`, `KURVE`, `STAFFEL`, `VERSATZ`. Die CSS-Fassung steht in
   `registry.json` (Feld `css`) und in `src/app/globals.css`. Bei Änderung beide nachziehen.
@@ -49,11 +53,15 @@ aller Projekte.
 - Laufprobe: `node ~/.claude/tools/ui-verify/probe-growcore-ui.mjs` gegen `next start -p 3123`.
   Prüft Desktop 1280 und Handy 390, ob nach dem Durchscrollen alles sichtbar ist, ob bei reduce sofort
   alles steht, Schublade, Filter, Fokus nach Seitenwechsel und Konsolenfehler.
+- Panel-Schalter: `node ~/.claude/tools/ui-verify/probe-growcore-ui-stopp.mjs` gegen `next start -p 3127`.
+  Je Scroll-Baustein: ohne Attribut läuft er, mit Attribut ab Start und mitten im Lauf steht er im
+  nächsten Frame am Ende und bleibt dort (1280 und 390).
 
 **Fallen**
 - `contextSafe(fn)` direkt im Render meldet die React-Compiler-Regel `react-hooks/refs`. Lösung:
   `contextSafe` erst im Handler aufrufen (`src/app/tokens/kurven.tsx`).
 - `gsap.matchMedia().add({…}, fn)` ruft `fn` nur auf, wenn mindestens eine Bedingung zutrifft. Wer
   auch bei reduce laufen muss, nimmt `immer: 'all'` dazu (`scroll-geschichte.tsx`).
+- `ScrollTrigger#getTween()` liefert ohne Nachlauf `0`, nicht `undefined`: `getTween()?.kill()` wirft.
 - Mit `autoAlpha` ausgeblendete Elemente sind nicht fokussierbar. Scroll-Reveals nutzen deshalb nur
   `opacity`.

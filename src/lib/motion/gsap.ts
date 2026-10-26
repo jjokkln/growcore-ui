@@ -26,24 +26,37 @@ if (typeof window !== 'undefined') {
   // früh oder zu spät aus.
   document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
-  // Panel schaltet um: Auftritte springen ans Ende, scrollgebundene Effekte (Parallaxe) gehen an
-  // den Anfang zurück und stehen still. Erst den Trigger lösen, sonst startet er die Animation beim
-  // nächsten Scrollen neu. Greift auch beim Laden: Das Panel nimmt das Attribut beim Hydrieren kurz
-  // weg und setzt es wieder; was in dieser Lücke gestartet ist, wird hier eingeholt.
-  // Ausschalten wirkt ab dem nächsten Seitenaufbau.
+  // Panel schaltet um: Im nächsten Frame steht alles im Endzustand und bleibt dort. Greift auch
+  // beim Laden: Das Panel nimmt das Attribut beim Hydrieren kurz weg und setzt es wieder; was in
+  // dieser Lücke gestartet ist, wird hier eingeholt. Ausschalten wirkt ab dem nächsten Seitenaufbau.
   new MutationObserver(() => {
     if (!gestoppt()) return
+    // 1. Scrollgebunden: erst den Trigger lösen, sonst startet Scrollen die Animation neu, und den
+    //    Nachlauf von scrub: 0.6 (ein eigener Tween) beenden, sonst schreibt er weiter. Hängt sie am
+    //    Scrollen, geht sie zurück in den Zustand ohne GSAP (revert), also den von „Bewegung
+    //    reduzieren“: Ablauf und Enthüllung fertig, Kartenstapel ruhend. Sonst spult sie ans Ende,
+    //    auch wenn sie noch auf ihren Einsatz wartet. Ohne Animation (Fortschrittsbalken,
+    //    Schrittwechsel) ist es Anzeige, keine Bewegung: bleibt.
     ScrollTrigger.getAll().forEach((st) => {
-      // Ohne Animation (Fortschrittsbalken, „Nach oben“) ist es Anzeige, keine Bewegung: bleibt.
       const animation = st.animation
       if (!animation) return
       const scrub = Boolean(st.vars.scrub)
+      // Ohne Nachlauf liefert getTween() 0, nicht undefined: kein ?. verwenden.
+      const nachlauf = st.getTween()
+      if (nachlauf) nachlauf.kill()
       st.kill(false, true)
-      // Nicht zusätzlich kill(): Der erste Frame rendert GSAP am Ende des Ticks, ein sofortiges
-      // kill() ließe die Elemente im Startzustand stehen.
-      animation.progress(scrub ? 0 : 1)
+      if (scrub) animation.revert()
+      else animation.totalProgress(1)
     })
-    gsap.globalTimeline.getChildren(true, true, false).forEach((t) => t.progress(1))
+    // 2. Alles Übrige: die oberste Ebene der globalen Timeline ans Ende spulen, nie die Tweens in
+    //    einer Timeline einzeln. Die setzt sie sonst im nächsten Tick auf ihre eigene Position
+    //    zurück und spielt weiter (gemessen: 43,9 statt 100), und ihr onComplete käme nie.
+    //    totalProgress, nicht progress: Endlosschleifen (repeat: -1) enden so auch. Ausgelassen:
+    //    Angehaltenes (bewegt sich nicht; eine vorbereitete Menü-Timeline spränge sonst auf) und
+    //    verzögerte Aufrufe ohne Dauer, auch die von ScrollTrigger selbst.
+    gsap.globalTimeline.getChildren(false, true, true).forEach((t) => {
+      if (!t.paused() && t.totalDuration()) t.totalProgress(1)
+    })
   }).observe(document.documentElement, { attributes: true, attributeFilter: [STOPP_ATTRIBUT] })
 }
 

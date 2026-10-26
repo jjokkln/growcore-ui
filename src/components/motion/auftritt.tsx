@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, DAUER, KURVE, ScrollTrigger, STAFFEL, VERSATZ, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, ScrollTrigger, STAFFEL, STOPP_ATTRIBUT, VERSATZ, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Auftritt: Alles darin mit
 //   data-auftritt  blendet gestaffelt von unten ein,
@@ -32,18 +32,37 @@ export function Auftritt({ children, beimScrollen = false }: { children: React.R
         gsap.set(balken, { scaleX: 0, transformOrigin: '0 50%' })
         el.dataset.auftrittHuelle = 'bereit'
 
+        // Je Einsatz neu gefragt: Kommt der Schalter erst nach dem Laden, erscheint, was danach ins
+        // Bild scrollt, sofort statt aufzutreten.
         const zeige = (ziele: Element[]) =>
-          gsap.to(ziele, { opacity: 1, y: 0, duration: DAUER.md, ease: KURVE.raus, stagger: STAFFEL, overwrite: true })
+          bewegungErlaubt()
+            ? gsap.to(ziele, { opacity: 1, y: 0, duration: DAUER.md, ease: KURVE.raus, stagger: STAFFEL, overwrite: true })
+            : gsap.set(ziele, { opacity: 1, y: 0, overwrite: true })
         const fuelle = (ziele: Element[]) =>
-          gsap.to(ziele, { scaleX: 1, duration: DAUER.lg, ease: KURVE.raus, stagger: 0.035, delay: 0.1 })
+          bewegungErlaubt()
+            ? gsap.to(ziele, { scaleX: 1, duration: DAUER.lg, ease: KURVE.raus, stagger: 0.035, delay: 0.1 })
+            : gsap.set(ziele, { scaleX: 1, overwrite: true })
 
         if (!beimScrollen) {
           zeige(teile)
           fuelle(balken)
           return
         }
-        ScrollTrigger.batch(teile, { start: 'top 88%', once: true, onEnter: zeige })
-        ScrollTrigger.batch(balken, { start: 'top 92%', once: true, onEnter: fuelle })
+        const trigger = [
+          ...ScrollTrigger.batch(teile, { start: 'top 88%', once: true, onEnter: zeige }),
+          ...ScrollTrigger.batch(balken, { start: 'top 92%', once: true, onEnter: fuelle }),
+        ]
+        // Schalter kommt nach dem Laden: Was noch auf seinen Einsatz wartet, steht sofort da, auch
+        // wenn es schon unten im Bild ist. Diese Trigger haben keine Animation, die der Kern
+        // (lib/motion/gsap.ts) ans Ende spulen könnte, deshalb hier.
+        const stopp = new MutationObserver(() => {
+          if (bewegungErlaubt()) return
+          trigger.forEach((st) => st.kill())
+          zeige(teile)
+          fuelle(balken)
+        })
+        stopp.observe(document.documentElement, { attributes: true, attributeFilter: [STOPP_ATTRIBUT] })
+        return () => stopp.disconnect()
       })
       el.dataset.auftrittHuelle = 'bereit'
       return () => mm.revert()

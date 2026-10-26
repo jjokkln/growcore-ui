@@ -29,9 +29,10 @@ export function ScrollGeschichte({ schritte, className }: { schritte: Schritt[];
       const texte = gsap.utils.toArray<HTMLElement>('.gc-gs-schritt', el)
       const mm = gsap.matchMedia()
       mm.add({ bewegung: BEWEGUNG, immer: 'all' }, (ctx) => {
-        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
-        const dauer = ctx.conditions?.bewegung && bewegungErlaubt() ? DAUER.md : 0
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts). Je
+        // Wechsel neu gefragt: Kommt der Schalter erst später, blendet der nächste Schritt nicht mehr.
         const zeige = (i: number) => {
+          const dauer = ctx.conditions?.bewegung && bewegungErlaubt() ? DAUER.md : 0
           bilder.forEach((b, j) =>
             gsap.to(b, { autoAlpha: j === i ? 1 : 0, scale: j === i ? 1 : 0.97, duration: dauer, ease: KURVE.raus, overwrite: true }),
           )

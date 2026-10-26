@@ -61,9 +61,14 @@ export function Laufband({
     { scope: ref, dependencies: [tempo] },
   )
 
+  // Nach dem Panel-Schalter „Animationen stoppen“ läuft es nicht wieder an, auch nicht beim
+  // Verlassen mit Maus oder Fokus (lib/motion/gsap.ts lässt Angehaltenes stehen).
+  const weiter = () => {
+    if (bewegungErlaubt()) tl.current?.play()
+  }
   const umschalten = () => {
-    if (!tl.current) return
-    if (steht) tl.current.play()
+    if (!tl.current || (steht && !bewegungErlaubt())) return
+    if (steht) weiter()
     else tl.current.pause()
     setSteht(!steht)
   }
@@ -74,9 +79,9 @@ export function Laufband({
       <div
         className="gc-lb-fenster"
         onMouseEnter={() => !steht && tl.current?.pause()}
-        onMouseLeave={() => !steht && tl.current?.play()}
+        onMouseLeave={() => !steht && weiter()}
         onFocusCapture={() => tl.current?.pause()}
-        onBlurCapture={() => !steht && tl.current?.play()}
+        onBlurCapture={() => !steht && weiter()}
       >
         <div ref={band} className="gc-lb-band">
           <div className="gc-lb-teil">{children}</div>
