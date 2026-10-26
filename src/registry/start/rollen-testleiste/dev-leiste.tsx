@@ -14,9 +14,14 @@ import { createClient } from '@/lib/supabase/server'
 // nach dem Wechsel auf ein gesperrtes Konto):
 //
 //   <body>
-//     <DevLeiste />
+//     <Suspense fallback={null}>
+//       <DevLeiste />
+//     </Suspense>
 //     {children}
 //   </body>
+//
+// Die Suspense-Grenze ist Pflicht: Die Leiste liest Cookies (Sitzung), und mit cacheComponents
+// meldet Next 16 ohne Grenze „runtime data during prerendering“ (gefunden boston-club).
 //
 // .env.local: DEV_TOOLBAR=1, DEV_ACCOUNT_PASSWORD=<lang, zufällig>. Dann einmal „Prüfkonten anlegen“.
 

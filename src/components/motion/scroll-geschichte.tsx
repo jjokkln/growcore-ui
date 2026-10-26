@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, DAUER, KURVE, ScrollTrigger, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, ScrollTrigger, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Erklärseite in Schritten: Links (auf dem Handy oben) steht ein Bild fest, rechts scrollen die
 // Schritte vorbei. Erreicht ein Schritt die Mitte, wird er hervorgehoben und sein Bild blendet über.
@@ -29,7 +29,8 @@ export function ScrollGeschichte({ schritte, className }: { schritte: Schritt[];
       const texte = gsap.utils.toArray<HTMLElement>('.gc-gs-schritt', el)
       const mm = gsap.matchMedia()
       mm.add({ bewegung: BEWEGUNG, immer: 'all' }, (ctx) => {
-        const dauer = ctx.conditions?.bewegung ? DAUER.md : 0
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        const dauer = ctx.conditions?.bewegung && bewegungErlaubt() ? DAUER.md : 0
         const zeige = (i: number) => {
           bilder.forEach((b, j) =>
             gsap.to(b, { autoAlpha: j === i ? 1 : 0, scale: j === i ? 1 : 0.97, duration: dauer, ease: KURVE.raus, overwrite: true }),

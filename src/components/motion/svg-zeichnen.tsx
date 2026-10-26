@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
-import { BEWEGUNG, DAUER, KURVE, gsap, registriere, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, bewegungErlaubt, gsap, registriere, useGSAP } from '@/lib/motion/gsap'
 
 registriere(DrawSVGPlugin, MotionPathPlugin)
 
@@ -24,6 +24,8 @@ export function SvgZeichnen({ children, scrub = false, className }: { children: 
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const tl = gsap.timeline({
           scrollTrigger: scrub
             ? { trigger: el, start: 'top 75%', end: 'bottom 40%', scrub: 0.6 }

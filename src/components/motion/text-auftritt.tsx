@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { SplitText } from 'gsap/SplitText'
-import { BEWEGUNG, DAUER, KURVE, gsap, registriere, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, bewegungErlaubt, gsap, registriere, useGSAP } from '@/lib/motion/gsap'
 
 registriere(SplitText)
 
@@ -37,6 +37,8 @@ export function TextAuftritt({
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, (ctx) => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         let aktiv = true
         document.fonts.ready.then(() => {
           if (!aktiv) return

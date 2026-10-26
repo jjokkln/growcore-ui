@@ -42,6 +42,7 @@ function adminClient() {
  * Fehler gehen ins Server-Log, der Besucher merkt nichts.
  */
 export async function einwilligungNachweisen(meldung: unknown): Promise<void> {
+  // audit-ausnahme: Die Zeile in einwilligungen IST der Nachweis (Art. 7 Abs. 1 DSGVO); ein zweiter Eintrag im Audit-Log wäre eine Doppelung ohne Personenbezug.
   // Alles, was aus dem Browser kommt, ist ungeprüft. Eine Server-Action ist ein öffentlicher
   // Endpunkt, auch wenn nur das Banner sie aufruft.
   if (typeof meldung !== 'object' || meldung === null) return

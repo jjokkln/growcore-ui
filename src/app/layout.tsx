@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Seitenwechsel } from '@/components/motion/seitenwechsel'
 import { MeldungenRahmen } from '@/components/motion/meldung'
 import { referenzenVorhanden } from './referenzen/_daten'
 import './globals.css'
@@ -40,8 +39,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           </nav>
         </header>
         <MeldungenRahmen>
+          {/* Der Seitenwechsel liegt in template.tsx, also innerhalb dieses main. */}
           <main id="hauptbereich" className="mx-auto max-w-6xl px-4 pb-32 sm:px-6">
-            <Seitenwechsel>{children}</Seitenwechsel>
+            {children}
           </main>
         </MeldungenRahmen>
       </body>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, ScrollTrigger, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, ScrollTrigger, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Karten legen sich beim Scrollen übereinander: Jede bleibt oben stehen (position: sticky), die
 // nächste schiebt sich darüber, die verdeckte tritt leicht zurück (kleiner, etwas dunkler).
@@ -23,6 +23,8 @@ export function Kartenstapel({ karten, className }: { karten: React.ReactNode[];
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const liste = gsap.utils.toArray<HTMLElement>('.gc-ks-karte', el)
         liste.slice(0, -1).forEach((karte, i) => {
           gsap.to(karte, {

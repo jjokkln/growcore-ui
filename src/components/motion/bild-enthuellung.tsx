@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, DAUER, KURVE, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Bild öffnet sich aus einem Ausschnitt (clip-path) und setzt sich dabei von leicht vergrößert
 // auf normal. Wirkt wie ein Vorhang, kostet aber kaum Rechenleistung: clip-path und transform
@@ -36,6 +36,8 @@ export function BildEnthuellung({
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const innen = el.firstElementChild
         const tl = gsap.timeline({
           scrollTrigger: scrub

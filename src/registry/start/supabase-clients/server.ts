@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { connection } from 'next/server'
 import { supabaseFetch } from '@/lib/supabase/query-budget'
 import { oeffentlicherSchluessel, supabaseUrl } from '@/lib/supabase/umgebung'
 
@@ -14,6 +15,10 @@ import { oeffentlicherSchluessel, supabaseUrl } from '@/lib/supabase/umgebung'
 // Einbau: `const supabase = await createClient()` aus '@/lib/supabase/server'.
 
 export async function createClient() {
+  // Erst zur Anfragezeit: Mit partialPrefetching sind Cookies schon beim Vorab-Rendern lesbar,
+  // Date.now() aber nicht, und getClaims() prüft damit den Ablauf des Tokens. Ein Client mit
+  // Sitzung ist ohnehin nie cachebar (gemessen boston-club 2026-10-15, „unstable value Date.now()“).
+  await connection()
   const cookieStore = await cookies()
 
   return createServerClient(supabaseUrl(), oeffentlicherSchluessel(), {

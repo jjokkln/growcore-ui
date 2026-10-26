@@ -5,7 +5,7 @@ kurz: Der Übergang von einer Seite zur nächsten, mit Richtung, festem Kopf und
 stichworte: [seitenwechsel, übergang, page transition, view transition, navigation animieren, ladezustand, skelett, zurück, weiter]
 bausteine: [seitenwechsel, platzhalter]
 demo: [seitenwechsel]
-stand: 2026-10-02
+stand: 2026-10-26
 ---
 
 ## Wofür
@@ -19,8 +19,11 @@ es nicht kann, wechselt die Seite ohne Animation.
 
 ## Aufbau
 
-- **Ort:** Der Baustein liegt um den Inhaltsbereich, nie um Kopf und
-  Navigation: `<main id="hauptbereich"><Seitenwechsel>{children}</Seitenwechsel></main>`.
+- **Ort:** Der Baustein liegt in `app/template.tsx`, also innerhalb von
+  `<main id="hauptbereich">` im Layout, nie um Kopf und Navigation:
+  `export default function Template({ children }) { return <Seitenwechsel>{children}</Seitenwechsel> }`.
+  Ein Template wird bei jeder Navigation neu angelegt; so braucht der Baustein
+  kein `usePathname()` und keine Suspense-Grenze (cacheComponents).
 - **Fester Kopf:** Der Kopf bekommt `style={{ viewTransitionName: 'kopf' }}`.
   Sonst wird er als Teil der Seite mit ausgeblendet oder der Inhalt gleitet
   über ihn.
@@ -28,7 +31,10 @@ es nicht kann, wechselt die Seite ohne Animation.
   `transitionTypes={['zurueck']}`. Wechsel ohne Typ bekommen das neutrale
   Überblenden.
 - **Was als Wechsel zählt:** nur ein neuer Pfad. Speichern, Neuladen der Daten
-  und Änderungen der Abfrage (`?q=`, `?tab=`) animieren nicht.
+  und Änderungen der Abfrage (`?q=`, `?tab=`) legen das Template nicht neu an
+  und animieren nicht.
+- **Zwei Fassungen:** Website `<Seitenwechsel>`, App-Bereich mit eigenem
+  `template.tsx` und `<Seitenwechsel ruhig>` (nur Überblenden in `DAUER.sm`).
 - **Laden:** `loading.tsx` zeigt einen Platzhalter in der Form der Zielseite
   (Baustein `platzhalter`). Er erscheint erst nach 180 ms, schnelle Seiten
   blitzen nicht grau auf.
@@ -52,7 +58,7 @@ es nicht kann, wechselt die Seite ohne Animation.
   (gleicher `name` an beiden `<ViewTransition>`)
 - Schrittfolgen mit Richtung (Schritt 2 zu 3 vor, 3 zu 2 zurück)
 - Zwei Fassungen in einem Projekt: Website mit Auftritt, Kundenbereich nur
-  mit Überblenden
+  mit Überblenden (`<Seitenwechsel ruhig>` im `template.tsx` des Bereichs)
 
 ## Worauf es ankommt
 
@@ -90,8 +96,12 @@ es nicht kann, wechselt die Seite ohne Animation.
 - **Nicht bewegen:** Kopf, Navigation, Seitenleiste, Fuß. Kein seitliches
   Gleiten über mehr als 40 px, kein Zoom, keine Wischblende über die ganze
   Seite.
-- Bei „Bewegung reduzieren“ werden alle `::view-transition-*`-Animationen
+- Bei „Bewegung reduzieren“ und beim Panel-Schalter „Animationen stoppen“
+  (`html[data-a11y-stop-animations]`) werden alle `::view-transition-*`-Animationen
   abgeschaltet, die Seite wechselt sofort.
+- Während des Übergangs nimmt `::view-transition` keine Klicks an
+  (`pointer-events: none`): Ein Klick landet auf der neuen Seite, nicht auf dem
+  Standbild der alten.
 
 ## Zugänglichkeit
 
@@ -124,11 +134,11 @@ es nicht kann, wechselt die Seite ohne Animation.
 
 ## Prüfliste
 
-- [ ] `seitenwechsel` um `<main id="hauptbereich">`, nicht um das Layout
+- [ ] `seitenwechsel` in `app/template.tsx` (innerhalb von `<main id="hauptbereich">`), nicht um das Layout
 - [ ] Kopf mit `viewTransitionName: 'kopf'`, steht beim Wechsel still
 - [ ] Richtung nur für Ebenenwechsel, gleiche Ebene neutral
 - [ ] Nur Pfadwechsel animiert, `?tab=` und Speichern nicht
 - [ ] Platzhalter in Endform (`platzhalter`), nichts verschiebt sich
 - [ ] Fokus auf `<h1>`, eigener `<title>` je Seite
 - [ ] Apps: kurz, keine Lade-Choreografie
-- [ ] Sofortiger Wechsel bei reduzierter Bewegung
+- [ ] Sofortiger Wechsel bei reduzierter Bewegung und mit „Animationen stoppen“

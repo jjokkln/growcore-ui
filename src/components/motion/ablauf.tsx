@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Ablauf in Schritten („So arbeiten wir", „In drei Schritten zum Angebot"). Beim Scrollen läuft eine
 // Linie von Schritt zu Schritt, jeder Punkt ploppt auf, wenn sie ihn erreicht, der Text folgt.
@@ -38,7 +38,8 @@ export function Ablauf({
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add({ bewegung: BEWEGUNG, quer: '(min-width: 768px)' }, (ctx) => {
-        if (!ctx.conditions?.bewegung) return
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!ctx.conditions?.bewegung || !bewegungErlaubt()) return
         const achse = ctx.conditions.quer ? 'scaleX' : 'scaleY'
         const tl = gsap.timeline({
           defaults: { ease: 'none' },

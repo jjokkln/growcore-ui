@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { BEWEGUNG, ScrollTrigger, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, ScrollTrigger, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Endloses Laufband (Logos, Schlagworte, Leistungen). Höchstens eines je Seite.
 // Läuft gleichmäßig; schnelles Scrollen beschleunigt es kurz, danach beruhigt es sich wieder.
@@ -39,6 +39,8 @@ export function Laufband({
       if (!b) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const breite = (b.firstElementChild as HTMLElement).offsetWidth
         tl.current = gsap.to(b, { x: -breite, duration: breite / tempo, ease: 'none', repeat: -1 })
         const st = ScrollTrigger.create({

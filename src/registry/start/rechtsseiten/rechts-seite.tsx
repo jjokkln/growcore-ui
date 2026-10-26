@@ -20,8 +20,9 @@ export function RechtsSeite({
   einleitung?: ReactNode
   children: ReactNode
 }) {
+  // Kein eigenes <main>: das steht schon im Root-Layout (genau ein main je Seite).
   return (
-    <main
+    <div
       id="hauptinhalt"
       className="mx-auto w-full max-w-3xl px-5 py-14 text-foreground sm:px-6 sm:py-20 [&_a]:underline [&_a]:underline-offset-4 [&_li]:mb-2 [&_p]:mb-4 [&_p]:leading-relaxed [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6"
     >
@@ -30,7 +31,7 @@ export function RechtsSeite({
       </h1>
       {einleitung ? <div className="text-muted-foreground">{einleitung}</div> : null}
       {children}
-    </main>
+    </div>
   )
 }
 

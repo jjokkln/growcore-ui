@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { ConsentProvider } from '@/components/consent/consent-provider'
 import { ConsentBanner } from '@/components/consent/consent-banner'
 import { ConsentEinstellungenKnopf } from '@/components/consent/consent-einstellungen-knopf'
@@ -16,7 +17,11 @@ export function SeitenRahmen({ children }: { children: React.ReactNode }) {
     <ConsentProvider beiEntscheidung={einwilligungNachweisen}>
       {children}
       <SeitenFuss />
-      <ConsentBanner />
+      {/* Der Banner liest usePathname(). Mit cacheComponents bricht ohne Suspense-Grenze der Build,
+          sobald eine Route mit [id] ohne generateStaticParams dazukommt (gefunden boston-club). */}
+      <Suspense fallback={null}>
+        <ConsentBanner />
+      </Suspense>
     </ConsentProvider>
   )
 }
@@ -26,7 +31,9 @@ export function SeitenFuss() {
   return (
     <footer className="border-t px-4 py-8 text-sm sm:px-6">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-        <span>© {new Date().getFullYear()} {anzeigename()}</span>
+        {/* Ohne Jahr: new Date() im Server-Render bricht mit cacheComponents (Next 16 Standard) das
+            Prerendering jeder Seite. Ein Copyright braucht kein Jahr. */}
+        <span>© {anzeigename()}</span>
         <nav aria-label="Rechtliches" className="flex flex-wrap gap-x-6 gap-y-2">
           <Link href="/impressum" className={link}>Impressum</Link>
           <Link href="/datenschutz" className={link}>Datenschutz</Link>

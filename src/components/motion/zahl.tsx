@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useRef } from 'react'
-import { BEWEGUNG, KURVE, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, KURVE, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Eine Kennzahl, die beim ersten Erscheinen hochzählt und bei jeder späteren Änderung vom alten
 // zum neuen Wert läuft. Nur für echte KPIs, nicht für jede Zahl auf der Seite.
@@ -49,6 +49,8 @@ export function Zahl({
 
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const z = { w: von }
         zeige(von)
         gsap.to(z, {

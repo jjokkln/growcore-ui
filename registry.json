@@ -7,7 +7,7 @@
       "name": "bewegung",
       "type": "registry:lib",
       "title": "Bewegung (Kern)",
-      "description": "GSAP-Kern: eine Registrierungsstelle (lib/motion/gsap.ts), Motion-Tokens DAUER/KURVE als TS und CSS-Variablen, BEWEGUNG-Bedingung für reduced motion. Voraussetzung aller anderen Bausteine.",
+      "description": "GSAP-Kern: eine Registrierungsstelle (lib/motion/gsap.ts), Motion-Tokens DAUER/KURVE als TS und CSS-Variablen, BEWEGUNG-Bedingung für reduced motion, bewegungErlaubt() beachtet auch den Panel-Schalter „Animationen stoppen“ (@growcore/a11y). Voraussetzung aller anderen Bausteine.",
       "dependencies": [
         "gsap@^3.15.0",
         "@gsap/react@^2.1.2"
@@ -219,7 +219,7 @@
       "name": "seitenwechsel",
       "type": "registry:component",
       "title": "Seitenwechsel",
-      "description": "View Transitions zwischen Seiten mit Richtung (vor/zurueck), Fokus auf die neue h1. Ohne GSAP.",
+      "description": "View Transitions zwischen Seiten mit Richtung (vor/zurueck) und Variante ruhig, Fokus auf die neue h1, Einbau über app/template.tsx. Beachtet reduzierte Bewegung und den Panel-Schalter „Animationen stoppen“. Ohne GSAP.",
       "files": [
         {
           "path": "src/components/motion/seitenwechsel.tsx",

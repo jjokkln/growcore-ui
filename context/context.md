@@ -25,6 +25,11 @@ aller Projekte.
   daher gibt es keine zweite Kopie.
 - `src/lib/motion/gsap.ts`: einzige Registrierungsstelle für GSAP (Kern-Baustein `bewegung`).
   Plugins, die nur ein Baustein braucht, registriert dieser selbst mit `registriere()`.
+  `bewegungErlaubt()` beachtet auch den Panel-Schalter `data-a11y-stop-animations`
+  (@growcore/a11y), ein MutationObserver hält beim Umschalten alles an. Jeder Baustein prüft
+  `bewegungErlaubt()` zusätzlich in seinem `mm.add(BEWEGUNG, …)`, sonst tritt nach einem
+  Seitenwechsel die neue Seite trotz Schalter auf (gemessen 2026-10-26).
+- Seitenwechsel: in `src/app/template.tsx`, nicht im Layout (Template legt sich je Navigation neu an).
 - `src/lib/motion/tokens.ts`: `DAUER`, `KURVE`, `STAFFEL`, `VERSATZ`. Die CSS-Fassung steht in
   `registry.json` (Feld `css`) und in `src/app/globals.css`. Bei Änderung beide nachziehen.
 - CSS, das ein Baustein braucht, liegt in der Komponente als `<style href precedence>`. React 19

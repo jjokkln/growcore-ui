@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { BEWEGUNG, DAUER, KURVE, STAFFEL, VERSATZ, ScrollTrigger, gsap, useGSAP } from '@/lib/motion/gsap'
+import { BEWEGUNG, DAUER, KURVE, ScrollTrigger, STAFFEL, VERSATZ, bewegungErlaubt, gsap, useGSAP } from '@/lib/motion/gsap'
 
 // Auftritt: Alles darin mit
 //   data-auftritt  blendet gestaffelt von unten ein,
@@ -24,6 +24,8 @@ export function Auftritt({ children, beimScrollen = false }: { children: React.R
       if (!el) return
       const mm = gsap.matchMedia()
       mm.add(BEWEGUNG, () => {
+        // Panel-Schalter „Animationen stoppen“ wie reduzierte Bewegung (lib/motion/gsap.ts).
+        if (!bewegungErlaubt()) return
         const teile = gsap.utils.toArray<HTMLElement>('[data-auftritt]', el)
         const balken = gsap.utils.toArray<HTMLElement>('[data-balken]', el)
         gsap.set(teile, { opacity: 0, y: VERSATZ })

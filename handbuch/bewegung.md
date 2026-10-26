@@ -5,7 +5,7 @@ kurz: Wann sich etwas bewegt, wie schnell, auf welcher Kurve und mit welchem GSA
 stichworte: [bewegung, animation, animieren, gsap, motion, übergang, mikrointeraktion, scroll, timeline, easing, kurve, dauer]
 bausteine: [bewegung, auftritt, text-auftritt, zahl, ablauf, scroll-geschichte, svg-zeichnen, flip-liste, aktion-knopf]
 demo: [ablauf, svg-zeichnen]
-stand: 2026-10-02
+stand: 2026-10-26
 ---
 
 ## Wofür Bewegung da ist
@@ -165,6 +165,13 @@ useGSAP(() => {
 - **„Bewegung reduzieren“** im Betriebssystem schaltet alle Bewegung aus, Inhalte
   stehen sofort da. Das ist in jedem Baustein eingebaut und wird bei jedem neuen
   Effekt mit geprüft.
+- **Schalter „Animationen stoppen“** im Barrierefreiheits-Panel (`@growcore/a11y`)
+  wirkt genauso. Er setzt `data-a11y-stop-animations` am `<html>`, und das bremst
+  von sich aus nur CSS. Der Kern `bewegung` prüft es deshalb selbst:
+  `bewegungErlaubt()` ist bei gesetztem Attribut `false`, und ein Beobachter in
+  `lib/motion/gsap.ts` löst beim Umschalten alle Trigger, lässt Auftritte ans Ende
+  springen und stellt scrollgebundene Effekte auf den Anfang. Wer eine Bewegung
+  nicht über `matchMedia(BEWEGUNG)` startet, fragt `bewegungErlaubt()`.
 - **Anhalten können:** Was sich länger als 5 Sekunden von selbst bewegt (Laufband,
   Endlosschleife), hat einen sichtbaren Knopf zum Anhalten (WCAG 2.2.2).
 - **Keine großen Bewegungen im Sichtfeld:** starke Parallaxe, Zoom über den ganzen
