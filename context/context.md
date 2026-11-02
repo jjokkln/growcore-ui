@@ -1,67 +1,112 @@
-# growcore-ui — Kontext
+# growcore-ui — Code-Kontext
 
-**Was:** shadcn-Registry mit GrowCores Motion-Bausteinen (GSAP 3.15, React `<ViewTransition>`, CSS)
-plus Demo-Seite. Installiert wird über die GitHub-Adresse `jjokkln/growcore-ui/<name>`; die CLI liest
-`registry.json` direkt aus dem Repo, es gibt keinen Build und kein Hosting.
+> Wegweiser für Agenten: wie der Code gebaut ist und wo man was anfasst.
+> Stand, offene Aufgaben und Funktionen stehen im AI-OS
+> (`10_Projects/growcore-ui/`, lädt als Steckbrief beim Start). Höchstens 15 KB.
 
-**Handbuch:** `handbuch/*.md` ist die Quelle für UI-Muster (Kalender, Formular, Wizard …) und
-Grundlagen (Bewegung, Typografie …). Gerendert von `src/app/handbuch/` (marked, beim Build), gelesen
-von Agenten per grep. Der Katalog-Hook im AI-OS legt passende Kapitel bei Bau-Wünschen vor.
+## Was das ist
 
-**Startpakete:** `src/registry/start/<baustein>/` (14 Pflichtbausteine, in tsconfig ausgeschlossen,
-weil ihre Importe auf Pfade des Zielprojekts zeigen). Testen nur im frischen Projekt:
-create-next-app, `shadcn init -d -y`, `shadcn add jjokkln/growcore-ui/website-start -y`, Layout verdrahten,
-`npm run lint && npm test && npm run build`. Zwei Dateien eines Eintrags nie gleich benennen (shadcn biegt
-Importe sonst falsch um), Migrationszeitstempel eindeutig halten.
+shadcn-Registry mit GrowCores Motion-Bausteinen (GSAP 3.15, React `<ViewTransition>`, CSS)
+plus Demo-App und Handbuch. Installiert wird über die GitHub-Adresse
+`jjokkln/growcore-ui/<name>`; die CLI liest `registry.json` direkt aus dem Repo, es gibt
+keinen Build und kein Hosting. Nutzer: Lenny und die Agenten in den Kundenprojekten.
+Das Repo ist **öffentlich** (keine Kundennamen, keine Zugangsdaten, siehe `CLAUDE.md`).
 
-**Prüfung:** `pruefung/pruefe.mjs` (Regeln als Code, ohne Abhängigkeiten) und der wiederverwendbare
-Workflow `.github/workflows/pruefung.yml`. Projekte rufen ihn über den Baustein `pruefung` auf
-(`~/.github/workflows/growcore.yml`), kopieren ihn also nicht. Neue Regel: Eintrag in `PRUEFUNGEN`,
-dann gegen alle Projekte laufen lassen, bevor gepusht wird. Jeder Push hier ändert die Prüfung
-aller Projekte.
+## Ich will … → Datei
 
-**Aufbau**
-- `registry.json`: die Liste der Bausteine. Pfade zeigen auf die echten Dateien der Demo-App,
-  daher gibt es keine zweite Kopie.
-- `src/lib/motion/gsap.ts`: einzige Registrierungsstelle für GSAP (Kern-Baustein `bewegung`).
-  Plugins, die nur ein Baustein braucht, registriert dieser selbst mit `registriere()`.
-  `bewegungErlaubt()` beachtet auch den Panel-Schalter `data-a11y-stop-animations`
-  (@growcore/a11y), ein MutationObserver hält beim Umschalten alles an: Trigger lösen, `scrub`-
-  Animationen per `revert()` in den Ruhezustand, sonst die **oberste Ebene** der globalen Timeline
-  per `totalProgress(1)` ans Ende (Angehaltenes und Aufrufe ohne Dauer ausgenommen). Nie einzelne
-  Tweens in einer Timeline vorspulen: Die Timeline setzt sie im nächsten Tick zurück (gemessen
-  2026-10-26, 43,9 statt 100). Jeder Baustein prüft `bewegungErlaubt()` zusätzlich in seinem
-  `mm.add(BEWEGUNG, …)`, sonst tritt nach einem Seitenwechsel die neue Seite trotz Schalter auf
-  (gemessen 2026-10-26), und in jedem Rückruf, der später eine Bewegung startet.
-- Seitenwechsel: in `src/app/template.tsx`, nicht im Layout (Template legt sich je Navigation neu an).
-- `src/lib/motion/tokens.ts`: `DAUER`, `KURVE`, `STAFFEL`, `VERSATZ`. Die CSS-Fassung steht in
-  `registry.json` (Feld `css`) und in `src/app/globals.css`. Bei Änderung beide nachziehen.
-- CSS, das ein Baustein braucht, liegt in der Komponente als `<style href precedence>`. React 19
-  hängt es einmal in den `<head>` und entdoppelt es. So reist es mit der Datei.
-- `src/app/`: `/` Handbuch, `/handbuch/<slug>` Kapitel mit Live-Beispiel, `/bausteine` alle Bausteine,
-  `/tokens` Kurvenvergleich. `noindex`, noch nicht öffentlich betrieben (Impressum fehlt).
-- `/referenzen`: echte Kundenseiten nach Branche, **nur lokal**. Liste `lokal/referenzen.json`,
-  Bilder `public/lokal/referenzen/<id>.jpg`, beide gitignoriert (öffentliches Repo). Ohne die Datei
-  kein Nav-Link. Neue Seite: Eintrag in die JSON, dann
-  `node ~/.claude/tools/ui-verify/referenzen-bilder.mjs <id>`.
+| Ich will … | Schau in |
+| --- | --- |
+| einen Baustein ändern | `src/components/motion/<name>.tsx` (Hooks: `src/hooks/`, Hilfen: `src/lib/motion/`) |
+| einen neuen Baustein anlegen | Datei in `src/components/motion/` + Eintrag in `registry.json` |
+| ein Startpaket (Pflichtbaustein für Kundenprojekte) ändern | `src/registry/start/<baustein>/` + dessen Eintrag in `registry.json` |
+| GSAP registrieren, Bewegung an/aus (Panel-Schalter, reduce) | `src/lib/motion/gsap.ts` (`bewegungErlaubt()`, `registriere()`) |
+| Dauer, Kurve, Staffel, Versatz ändern | `src/lib/motion/tokens.ts` **und** `registry.json` (Feld `css`) **und** `src/app/globals.css` |
+| den Seitenwechsel ändern | `src/app/template.tsx` · `src/components/motion/seitenwechsel.tsx` |
+| ein Handbuch-Kapitel schreiben oder ändern | `handbuch/<slug>.md` · Darstellung `src/app/handbuch/` (`_daten.ts`, `[slug]/page.tsx`) |
+| ein Live-Beispiel im Handbuch/der Demo ändern | `src/app/_demo/` · `src/app/bausteine/page.tsx` |
+| eine Prüfregel ergänzen (gilt für alle Projekte) | `pruefung/pruefe.mjs`, Liste `PRUEFUNGEN` · `.github/workflows/pruefung.yml` |
+| Kurven vergleichen | `src/app/tokens/` |
+| eine echte Kundenseite als Referenz zeigen (nur lokal) | `lokal/referenzen.json` · `src/app/referenzen/` |
+| Testdaten für den Schlimmstfall | `src/lib/testdaten/schlimmstfall.ts` |
 
-**Prüfen**
-- `npm run lint && npm run build`
-- Handbuch: `node ~/.claude/tools/ui-verify/probe-growcore-handbuch.mjs` (alle Kapitel 1280/390, eine h1,
-  kein Überlauf, kein Geviertstrich; Abläufe Terminbuchung, Wizard, Anmeldung, Kalender)
-- `npx shadcn@latest registry validate ./registry.json`
-- Laufprobe: `node ~/.claude/tools/ui-verify/probe-growcore-ui.mjs` gegen `next start -p 3123`.
-  Prüft Desktop 1280 und Handy 390, ob nach dem Durchscrollen alles sichtbar ist, ob bei reduce sofort
-  alles steht, Schublade, Filter, Fokus nach Seitenwechsel und Konsolenfehler.
-- Panel-Schalter: `node ~/.claude/tools/ui-verify/probe-growcore-ui-stopp.mjs` gegen `next start -p 3127`.
-  Je Scroll-Baustein: ohne Attribut läuft er, mit Attribut ab Start und mitten im Lauf steht er im
-  nächsten Frame am Ende und bleibt dort (1280 und 390).
+## Aufbau auf einer Seite
+
+- **Stack:** Next.js 16 (App Router, React 19), Tailwind 4, GSAP 3.15 mit `@gsap/react`,
+  `marked` für das Handbuch. Kein Test-Skript in `package.json`.
+- **Einstiege (gezählt):** `registry.json` mit 45 Einträgen (23 Komponenten, 11 Libs,
+  3 Hooks, 2 Seiten, 2 Dateien, 2 Blöcke, 2 vom Typ `registry:item`) · 25 Handbuch-Kapitel in
+  `handbuch/` · Seiten `/`, `/handbuch/<slug>`, `/bausteine`, `/tokens`, `/referenzen`
+  (`noindex`, nicht öffentlich betrieben, Impressum fehlt) · 17 Startpaket-Ordner unter
+  `src/registry/start/`. Keine API-Routen, kein Cron, keine Datenbank im Repo.
+- **Registry:** `registry.json` listet die Bausteine; die Pfade zeigen auf die echten Dateien
+  der Demo-App, es gibt keine zweite Kopie.
+- **Handbuch:** `handbuch/*.md` ist die Quelle für UI-Muster und Grundlagen, gerendert
+  beim Build, von Agenten per grep gelesen. Der Katalog-Hook im AI-OS legt passende Kapitel
+  bei Bau-Wünschen vor.
+- **GSAP an einer Stelle:** Nur `src/lib/motion/gsap.ts` registriert GSAP (Kern-Baustein
+  `bewegung`). Plugins, die nur ein Baustein braucht, registriert dieser selbst mit
+  `registriere()`.
+- **CSS reist mit der Komponente:** als `<style href precedence>`; React 19 hängt es einmal
+  in den `<head>` und entdoppelt es.
+- **Startpakete** sind in `tsconfig` ausgeschlossen, weil ihre Importe auf Pfade des
+  Zielprojekts zeigen. Testen nur im frischen Projekt (siehe Befehle).
+- **Prüfung:** `pruefung/pruefe.mjs` (Regeln als Code, ohne Abhängigkeiten) und der
+  wiederverwendbare Workflow `.github/workflows/pruefung.yml`. Projekte rufen ihn über den
+  Baustein `pruefung` auf (`.github/workflows/growcore.yml` im Projekt, `uses:
+  jjokkln/growcore-ui/.github/workflows/pruefung.yml@main`), kopieren ihn also nicht.
+
+## Regeln, die nie gebrochen werden
+
+1. **Jeder Push hier ändert die Prüfung aller Projekte.** Neue Regel: Eintrag in `PRUEFUNGEN`,
+   dann gegen alle Projekte laufen lassen, bevor gepusht wird.
+2. **Bewegung respektiert den Panel-Schalter.** `bewegungErlaubt()` beachtet auch
+   `data-a11y-stop-animations` (@growcore/a11y); ein MutationObserver hält beim Umschalten
+   alles an (Trigger lösen, `scrub`-Animationen per `revert()` in den Ruhezustand, sonst die
+   **oberste Ebene** der globalen Timeline per `totalProgress(1)` ans Ende; Angehaltenes und
+   Aufrufe ohne Dauer ausgenommen). **Nie einzelne Tweens in einer Timeline vorspulen**, die
+   Timeline setzt sie im nächsten Tick zurück.
+3. **Jeder Baustein prüft `bewegungErlaubt()` zusätzlich** in seinem `mm.add(BEWEGUNG, …)` und
+   in jedem Rückruf, der später eine Bewegung startet, sonst tritt nach einem Seitenwechsel die
+   neue Seite trotz Schalter auf.
+4. **Zwei Dateien eines Registry-Eintrags nie gleich benennen** (shadcn biegt Importe sonst
+   falsch um); Migrationszeitstempel eindeutig halten.
+5. **Tokens an drei Stellen** (`tokens.ts`, `registry.json` Feld `css`, `globals.css`):
+   bei Änderung alle nachziehen.
+6. **Referenzen mit echten Kundenseiten nur lokal** (`/lokal`, `/public/lokal` sind
+   gitignoriert, das Repo ist öffentlich). Ohne `lokal/referenzen.json` gibt es keinen
+   Nav-Link.
+7. Weiteres: `CLAUDE.md` und `AGENTS.md`.
 
 **Fallen**
-- `contextSafe(fn)` direkt im Render meldet die React-Compiler-Regel `react-hooks/refs`. Lösung:
-  `contextSafe` erst im Handler aufrufen (`src/app/tokens/kurven.tsx`).
-- `gsap.matchMedia().add({…}, fn)` ruft `fn` nur auf, wenn mindestens eine Bedingung zutrifft. Wer
-  auch bei reduce laufen muss, nimmt `immer: 'all'` dazu (`scroll-geschichte.tsx`).
-- `ScrollTrigger#getTween()` liefert ohne Nachlauf `0`, nicht `undefined`: `getTween()?.kill()` wirft.
-- Mit `autoAlpha` ausgeblendete Elemente sind nicht fokussierbar. Scroll-Reveals nutzen deshalb nur
-  `opacity`.
+- `contextSafe(fn)` direkt im Render meldet die React-Compiler-Regel `react-hooks/refs`.
+  Lösung: `contextSafe` erst im Handler aufrufen (`src/app/tokens/kurven.tsx`).
+- `gsap.matchMedia().add({…}, fn)` ruft `fn` nur auf, wenn mindestens eine Bedingung zutrifft.
+  Wer auch bei reduce laufen muss, nimmt `immer: 'all'` dazu (`scroll-geschichte.tsx`).
+- `ScrollTrigger#getTween()` liefert ohne Nachlauf `0`, nicht `undefined`: `getTween()?.kill()`
+  wirft.
+- Mit `autoAlpha` ausgeblendete Elemente sind nicht fokussierbar. Scroll-Reveals nutzen
+  deshalb nur `opacity`.
+
+## Befehle
+
+```bash
+npm run dev
+npm run lint && npm run build
+npx shadcn@latest registry validate ./registry.json
+# Startpaket testen, nur in einem frischen Projekt:
+#   create-next-app, shadcn init -d -y, shadcn add jjokkln/growcore-ui/website-start -y,
+#   Layout verdrahten, npm run lint && npm test && npm run build
+# Neue Referenzbilder (nur lokal):
+node ~/.claude/tools/ui-verify/referenzen-bilder.mjs <id>
+# Panel-Schalter je Scroll-Baustein, gegen `next start -p 3127`:
+node ~/.claude/tools/ui-verify/probe-growcore-ui-stopp.mjs
+```
+
+Unklar: Die früher genannten Skripte `probe-growcore-ui.mjs` (Laufprobe gegen
+`next start -p 3123`) und `probe-growcore-handbuch.mjs` liegen nicht mehr in
+`~/.claude/tools/ui-verify/`.
+
+## Themen-Dateien
+
+Keine. Alles Verhalten steht hier; Herleitungen im AI-OS (`AI-OS/30_Knowledge/Referenzen/gsap.md`),
+Verlauf in `docs/context-verlauf.md`.
