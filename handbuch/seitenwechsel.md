@@ -110,6 +110,9 @@ es nicht kann, wechselt die Seite ohne Animation.
   ersten Laden und nicht, wenn die neue Seite den Fokus selbst gesetzt hat
   (etwa `autoFocus` in einem Formular). So beginnen Tastatur und Screenreader
   beim Inhalt, nicht wieder im Menü.
+  Zeigt `loading.tsx` beim Mount noch den Platzhalter, steht der Fokus kurz
+  auf dem Bereich und wandert zur `<h1>`, sobald sie erscheint (höchstens 5 s;
+  gefunden im Projektraum, 03.11.2026).
 - **Seitentitel:** Jede Seite hat einen eigenen `<title>`. Next.js sagt beim
   Wechsel den neuen Titel an, ein doppelter Titel wird doppelt angesagt.
 - **Eine `<h1>` je Seite**, sonst landet der Fokus auf der falschen.

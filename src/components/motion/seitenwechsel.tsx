@@ -68,10 +68,34 @@ export function Seitenwechsel({
     if (!navigiert && pfad === startPfad) return
     navigiert = true
     const bereich = document.getElementById(bereichId)
-    if (!bereich || bereich.contains(document.activeElement)) return
-    const ziel = bereich.querySelector<HTMLElement>('h1') ?? bereich
-    if (!ziel.hasAttribute('tabindex')) ziel.setAttribute('tabindex', '-1')
-    ziel.focus({ preventScroll: true })
+    if (!bereich) return
+    const fokussieren = (ziel: HTMLElement) => {
+      if (!ziel.hasAttribute('tabindex')) ziel.setAttribute('tabindex', '-1')
+      ziel.focus({ preventScroll: true })
+    }
+    // Hat die Seite den Fokus selbst gesetzt (autoFocus), bleibt er dort.
+    const selbstGesetzt = () => bereich.contains(document.activeElement) && document.activeElement !== bereich
+    const ueberschrift = bereich.querySelector<HTMLElement>('h1')
+    if (ueberschrift) {
+      if (!selbstGesetzt()) fokussieren(ueberschrift)
+      return
+    }
+    // Noch keine Überschrift: loading.tsx zeigt den Platzhalter, die Seite kommt gleich (Suspense).
+    // Bis dahin der Bereich selbst, dann die <h1>, sobald sie da ist (höchstens 5 s).
+    if (!selbstGesetzt()) fokussieren(bereich)
+    const beobachter = new MutationObserver(() => {
+      const h1 = bereich.querySelector<HTMLElement>('h1')
+      if (!h1) return
+      aufhoeren()
+      if (!selbstGesetzt()) fokussieren(h1)
+    })
+    const frist = window.setTimeout(() => aufhoeren(), 5000)
+    function aufhoeren() {
+      beobachter.disconnect()
+      window.clearTimeout(frist)
+    }
+    beobachter.observe(bereich, { childList: true, subtree: true })
+    return aufhoeren
   }, [bereichId])
 
   return (
