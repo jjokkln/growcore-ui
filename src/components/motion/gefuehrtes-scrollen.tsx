@@ -12,7 +12,8 @@ import { ScrollTrigger } from '@/lib/motion/gsap'
 // - Absicht lesen: Schub trägt zum nächsten, ein Stups federt zurück, der zweite geht weiter, viel
 //   Schwung rauscht frei durch. Jede neue Eingabe beendet ein Landen und behält das Tempo.
 // - Hohe Abschnitte und der Fuß sind frei lesbar; ein Abschnitt mit [data-punkte="0,160,…"] oder
-//   einem Kartenstapel ([data-stapel], kartenstapel.tsx) nennt eigene Landepunkte.
+//   einem Kartenstapel ([data-stapel], kartenstapel.tsx) nennt eigene Landepunkte. Teile mit
+//   [data-segment] in einem hohen Abschnitt landen je mittig im Bild.
 // - Finger und Scrollbalken nativ, danach Landen, wenn ein Abschnitt nah ist; Tasten springen weich.
 //   Nie nach Tab, Anker oder Suche. Frei: Strg+Rad, waagerecht, eigene Scrollbereiche, Dialoge.
 // - Passen: Ist ein Abschnitt am Desktop höher als der Bildschirm, wird sein Inhalt um höchstens 20 %
@@ -213,6 +214,31 @@ export function GefuehrtesScrollen() {
           Array.from(new Set([a, ...liste.map((o) => begrenzt(Math.round(basis + o), a, b)), b]))
             .sort((x, z) => x - z)
             .forEach((p) => aus.push({ a: p, b: p }))
+          return
+        }
+        // Abschnitte aus mehreren Teilen (data-segment): jedes Teil ist ein Landepunkt, mittig im
+        // Bild wie bei talp; ein Teil, das höher ist als der Bildschirm, landet mit der Oberkante.
+        // Ein Teil, das beim Punkt davor schon ganz zu sehen ist, bekommt keinen eigenen.
+        const segmente = a < b ? Array.from(el.querySelectorAll<HTMLElement>('[data-segment]')) : []
+        if (segmente.length) {
+          const punkte = [a]
+          segmente.forEach((s) => {
+            const q = s.getBoundingClientRect()
+            const t = q.top + window.scrollY
+            const u = t + q.height
+            const letzter = punkte[punkte.length - 1]
+            if (t >= letzter + nav - 1 && u <= letzter + nav + r + 1) return
+            const p = q.height <= r ? (t + u) / 2 - nav - r / 2 : t - nav - 24
+            punkte.push(begrenzt(Math.round(p), a, b))
+          })
+          const geordnet = [...punkte, b].sort((x, z) => x - z)
+          const gesetzt: number[] = []
+          geordnet.forEach((p) => {
+            const vorher = gesetzt[gesetzt.length - 1]
+            if (vorher === undefined || p - vorher > 40) gesetzt.push(p)
+            else if (p === b) gesetzt[gesetzt.length - 1] = b
+          })
+          gesetzt.forEach((p) => aus.push({ a: p, b: p }))
           return
         }
         const stapel = a < b ? el.querySelector<HTMLElement>('[data-stapel]') : null
