@@ -8,7 +8,8 @@ import { BEWEGUNG, ScrollTrigger, bewegungErlaubt, gsap, useGSAP } from '@/lib/m
 // Gut für drei bis fünf Leistungen, Schritte oder Fallbeispiele, die nacheinander gelesen werden
 // sollen. Kein Pin, kein Scroll-Hijacking: Die Seite scrollt normal, ohne JavaScript stapeln sich
 // die Karten trotzdem (nur ohne Zurücktreten).
-// --kopf-hoehe setzen, wenn ein fester Kopf die Karten sonst verdeckt.
+// --kopf-hoehe setzen, wenn ein fester Kopf die Karten sonst verdeckt. data-stapel: Mit
+// gefuehrtes-scrollen.tsx ist jede Karte ein eigener Landepunkt.
 const STIL = `
 .gc-ks{display:grid;gap:2rem}
 .gc-ks-karte{position:sticky;top:calc(var(--kopf-hoehe,0px) + 1.5rem + var(--gc-ks-i) * .75rem);transform-origin:50% 0;will-change:transform}
@@ -47,7 +48,7 @@ export function Kartenstapel({ karten, className }: { karten: React.ReactNode[];
   )
 
   return (
-    <div ref={ref} className={['gc-ks', className].filter(Boolean).join(' ')}>
+    <div ref={ref} className={['gc-ks', className].filter(Boolean).join(' ')} data-stapel>
       <style href="gc-kartenstapel" precedence="default">{STIL}</style>
       {karten.map((k, i) => (
         <div key={i} className="gc-ks-karte" style={{ ['--gc-ks-i' as string]: i }}>

@@ -379,6 +379,21 @@
       ]
     },
     {
+      "name": "gefuehrtes-scrollen",
+      "type": "registry:component",
+      "title": "Geführtes Scrollen",
+      "description": "Eine Sache pro Bildschirm: Die Seite folgt der Hand weich und landet mit ihrem Schwung auf dem nächsten Abschnitt; viel Schwung rauscht durch (nach talp.ai, aus lennyhelps.de).",
+      "registryDependencies": [
+        "jjokkln/growcore-ui/bewegung"
+      ],
+      "files": [
+        {
+          "path": "src/components/motion/gefuehrtes-scrollen.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "laufband",
       "type": "registry:component",
       "title": "Laufband",
