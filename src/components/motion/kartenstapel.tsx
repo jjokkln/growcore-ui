@@ -35,7 +35,9 @@ export function Kartenstapel({ karten, className }: { karten: React.ReactNode[];
             defaults: { ease: 'none' },
             scrollTrigger: {
               trigger: liste[i + 1],
-              start: 'top bottom',
+              // Erst abdunkeln, wenn die nächste Karte die stehende wirklich überdeckt (ihre Oberkante
+              // erreicht deren Unterkante), nicht schon, wenn sie unten ins Bild kommt.
+              start: () => `top ${(parseFloat(getComputedStyle(karte).top) || 0) + karte.offsetHeight}px`,
               end: () => `top ${ScrollTrigger.isTouch ? 30 : 20}%`,
               scrub: true,
               invalidateOnRefresh: true,
