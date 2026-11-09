@@ -122,12 +122,22 @@ export function GefuehrtesScrollen() {
     spaeter()
     document.fonts?.ready.then(spaeter)
     const nachBildern = setTimeout(spaeter, 1200)
-    window.addEventListener('resize', spaeter)
+    // Nur bei anderer Breite oder spürbar anderer Höhe: Die Adressleiste am Handy ändert die
+    // Höhe beim Scrollen ständig, und jedes refresh() dabei ließ die Seite springen.
+    let breit = window.innerWidth
+    let hoch = window.innerHeight
+    const beiGroesse = () => {
+      if (window.innerWidth === breit && Math.abs(window.innerHeight - hoch) < 150) return
+      breit = window.innerWidth
+      hoch = window.innerHeight
+      spaeter()
+    }
+    window.addEventListener('resize', beiGroesse)
     window.addEventListener('load', spaeter)
     return () => {
       cancelAnimationFrame(takt)
       clearTimeout(nachBildern)
-      window.removeEventListener('resize', spaeter)
+      window.removeEventListener('resize', beiGroesse)
       window.removeEventListener('load', spaeter)
     }
   }, [pfad])
@@ -136,9 +146,12 @@ export function GefuehrtesScrollen() {
     const html = document.documentElement
     const reduziert = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches
     const ausgenommen = Boolean(document.querySelector(AUS))
+    // Nur mit Maus oder Trackpad und ab Tablet-Breite. Am Handy kämpfte das Landen nach dem
+    // Loslassen gegen das native Ausrollen: Die Seite riss zurück und ruckelte (Lenny, 09.11.2026).
+    const finger = !window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 861px)').matches
 
     // Ohne Führung gleiten andere Bausteine trotzdem: so, wie der Browser es kann.
-    if (reduziert || ausgenommen) {
+    if (reduziert || ausgenommen || finger) {
       const einfach = (e: Event) => {
         const nach = (e as CustomEvent<{ nach: number }>).detail?.nach ?? 0
         window.scrollTo({ top: nach, behavior: reduziert ? 'instant' : 'smooth' })
